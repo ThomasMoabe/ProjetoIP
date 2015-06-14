@@ -4,8 +4,15 @@ public class Caixa {
 	private double saldocache; //pra não percorrer toda hora as transações calculando o saldo
 	private RepositorioTransacao transacoes;
 	
-	public Caixa() {
-		this.transacoes = new RepositorioTransacoesArray();
+	public Caixa(String tipoarmazenamento) {
+		switch(tipoarmazenamento) {
+		case "array":
+			this.transacoes = new RepositorioTransacoesArray();
+			break;
+		case "lista":
+			this.transacoes = new RepositorioTransacoesLista();
+			break;
+		}
 		this.saldocache = transacoes.getSaldo();
 	}
 	
