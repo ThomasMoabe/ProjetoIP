@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="src/Libraries/Jakarta/poi-3.12-20150511.jar"/>
 	<classpathentry kind="lib" path="src/lan/util/poi-3.12-20150511.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

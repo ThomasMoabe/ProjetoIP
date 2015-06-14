@@ -2,7 +2,8 @@ package lan.caixa;
 
 public interface RepositorioTransacao {
 		void inserir(String tipo, String descricao, double valor);
-		Transacao procurar(int id);
-		void remover(int id);
+		Transacao procura(int id);
+		void remove(int id);
 		double getSaldo();
+		Transacao[] toArray();
 }
