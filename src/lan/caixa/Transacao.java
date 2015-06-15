@@ -1,5 +1,5 @@
 package lan.caixa;
-import lan.util.Data;
+import java.util.Date;
 
 public class Transacao {
 	static int idatual = 1;
@@ -7,14 +7,16 @@ public class Transacao {
 	private String tipo; //entrada/saida
 	private String descricao;
 	private double valor;
-	private Data data;
+	private Date data;
+	private String administrador;
 	
-	public Transacao(String tipo, String descricao, double valor) {
+	public Transacao(String tipo, String descricao, double valor, String administrador) {
 		this.id = Transacao.idatual;
 		this.tipo = tipo;
 		this.descricao = descricao;
 		this.valor = valor;
-		this.data = new Data();
+		this.data = new Date();
+		this.administrador = administrador;
 		Transacao.idatual++;
 	}
 	
@@ -34,7 +36,11 @@ public class Transacao {
 		return this.valor;
 	}
 	
-	public Data getData() {
+	public Date getData() {
 		return this.data;
+	}
+	
+	public String getAdministrador() {
+		return this.administrador;
 	}
 }

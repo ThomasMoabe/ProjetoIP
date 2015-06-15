@@ -9,15 +9,15 @@ public class RepositorioTransacoesLista implements RepositorioTransacao {
 		this.proxima = null;
 	}
 	
-	public void inserir(String tipo, String descricao, double valor) {
+	public void inserir(String tipo, String descricao, double valor, String administrador) {
 		if (this.transacao == null) {
-			this.transacao = new Transacao(tipo, descricao, valor);
+			this.transacao = new Transacao(tipo, descricao, valor, administrador);
 		}
 		else if (this.proxima == null) {
 			this.proxima = new RepositorioTransacoesLista();
-			this.proxima.inserir(tipo, descricao, valor);
+			this.proxima.inserir(tipo, descricao, valor, administrador);
 		} else {
-			this.proxima.inserir(tipo, descricao, valor);
+			this.proxima.inserir(tipo, descricao, valor, administrador);
 		}
 	}
 	

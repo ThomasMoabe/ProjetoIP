@@ -9,7 +9,7 @@ public class RepositorioTransacoesArray implements RepositorioTransacao {
 		this.qtdtransacoes = 0;
 	}
 	
-	public void inserir(String tipo, String descricao, double valor) {
+	public void inserir(String tipo, String descricao, double valor, String administrador) {
 		if (this.listatransacoes.length==this.qtdtransacoes) {
 			Transacao[] listatransacoesmaior = new Transacao[this.listatransacoes.length*2];
 			for (int i = 0; i < this.qtdtransacoes; i++) {
@@ -17,7 +17,7 @@ public class RepositorioTransacoesArray implements RepositorioTransacao {
 			}
 			this.listatransacoes = listatransacoesmaior;
 		}
-		this.listatransacoes[this.qtdtransacoes] = new Transacao(tipo, descricao, valor);
+		this.listatransacoes[this.qtdtransacoes] = new Transacao(tipo, descricao, valor, administrador);
 		this.qtdtransacoes++;
 	}
 	

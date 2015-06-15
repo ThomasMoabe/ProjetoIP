@@ -16,11 +16,11 @@ public class Caixa {
 		this.saldocache = transacoes.getSaldo();
 	}
 	
-	public void novaTransacao (String tipo, String descricao, double valor) throws SaldoInsuficienteException {
+	public void novaTransacao (String tipo, String descricao, double valor, String administrador) throws SaldoInsuficienteException {
 		if (tipo.equals("saida") && (saldocache-valor)<0) {
 			throw new SaldoInsuficienteException();
 		}
-		transacoes.inserir(tipo, descricao, valor);
+		transacoes.inserir(tipo, descricao, valor, administrador);
 		this.saldocache = tipo.equals("entrada") ? (this.saldocache + valor) : (this.saldocache - valor);
 	}
 	
