@@ -18,7 +18,16 @@ public class Caixa2 {
 		
 		//testando iterator e imprimindo todos os resultados encontrados
 		while(varreregistros.hasNext()) {
-			System.out.println(((Transacao)varreregistros.next()).toString());
+			System.out.println(((Transacao)varreregistros.next()));
 		}
+		
+		tabelatransacoes.atualiza("{id:4} WHERE {id:1}");
+		
+		teste = tabelatransacoes.procura("{id:1} {administrador:thomas}");
+		varreregistros = new RegistroIterator(teste);
+		while(varreregistros.hasNext()) {
+			System.out.println(((Transacao)varreregistros.next()));
+		}
+		
 	}
 }

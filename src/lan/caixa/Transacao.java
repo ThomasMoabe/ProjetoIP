@@ -12,13 +12,16 @@ public class Transacao extends Registro{
 	
 	public Transacao(String[] valores) {
 		super(valores);
+		Transacao.idatual++;
+	}
+	
+	public void setValores(String[] valores) {
 		this.id = Integer.parseInt(valores[0]);
 		this.tipo = valores[1];
 		this.descricao = valores[2];
 		this.valor = Double.parseDouble(valores[3]);
 		this.data = valores[4];
 		this.administrador = valores[5];
-		Transacao.idatual++;
 	}
 	
 	public int getId() {

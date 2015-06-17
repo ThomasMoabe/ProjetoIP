@@ -19,7 +19,7 @@ public abstract class Tabela { //um repositório genérico que é tratado da mesma 
 	
 	/*pesquisas em tabelas seguem a seguinte formatação de filtragem {campo:valor}, pode ser ultilizado mais de um filtro separando por espaço, a única condição suportada é a iguadade*/
 	public Registro[] procura(String parametros) {
-		String[] parametrosarray = parametros.split(" ");
+		String[] parametrosarray = this.ExplodeParametros(parametros);
 		RepositorioLista encontrados = new RepositorioLista("encontrados", this.campos);
 		int indice = 0;
 		while (this.getRegistro(indice, 0) != null) { //varre todos os registros de forma genérica na tabela, independente do seu tipo
@@ -45,7 +45,65 @@ public abstract class Tabela { //um repositório genérico que é tratado da mesma 
 		}
 	}
 	
+	public void atualiza(String query) {
+		query = query.replaceAll("\\s","");
+		if(query.toLowerCase().indexOf("}where{") > 0) {
+			query = query.replaceAll("WHERE","where");
+			String[] separa = query.split("where");
+			Registro[] registrosmuda = this.procura(separa[1]);
+			String[][] valoresmudanca = this.ExplodeQuery(separa[0]);
+			for(int i=0;i<registrosmuda.length;i++) { //percorre todos os registros que deve atualizar
+				String[] valoresatuais = registrosmuda[i].getValores();
+				for (int j = 0; j < valoresmudanca.length; j++) {
+					int posicaovalor = this.getPosicaoCampo(valoresmudanca[j][0]);
+					String novovalor = valoresmudanca[j][1];
+					valoresatuais[posicaovalor] = novovalor;
+				}
+				registrosmuda[i].setValores(valoresatuais);
+				this.substitui(registrosmuda[i].getId(), registrosmuda[i]);
+			}
+		}
+	}
+	
+	public int getPosicaoCampo(String campo) {
+		int posicao = -1;
+		for (int i = 0; i < this.campos.length; i++) {
+			if (this.campos[i].equals(campo)) {
+				posicao = i;
+			}
+		}
+		return posicao;
+	}
+	
+	public String[][] ExplodeQuery(String query) {
+		int count = query.length() - query.replace("{", "").length();
+		String[][] explodida = new String[count][2];
+		int posicaoatual = 0;
+		while(query.indexOf("{")>=0) {
+			query = query.substring(query.indexOf("{")+1);
+			String[] explodevalor = query.substring(0, query.indexOf("}")).split(":");
+			explodida[posicaoatual][0] = explodevalor[0];
+			explodida[posicaoatual][1] = explodevalor[1];
+			posicaoatual++;
+		}
+		return explodida;
+	}
+	
+	public String[] ExplodeParametros(String query) {
+		query = query.replaceAll("\\s","");
+		int count = query.length() - query.replace("{", "").length();
+		String[] parametros = new String[count];
+		int posicaoatual = 0;
+		while (query.indexOf("{")>=0) {
+			query = query.substring(query.indexOf("{")+1);
+			parametros[posicaoatual] = "{" + query.substring(0, query.indexOf("}")+1);
+			posicaoatual++;
+		}
+		return parametros;
+	}
+	
 	public abstract Registro getRegistro(int indice, int saltos); //procura indice x a partir do 0
 	public abstract void removeporid(int id);
 	public abstract void inserir(Registro registro);
+	public abstract void substitui(int id, Registro registro);
 }

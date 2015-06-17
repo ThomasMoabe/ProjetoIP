@@ -1,5 +1,4 @@
 package lan.bd;
-import lan.caixa.*;;
 
 public class RepositorioArray extends Tabela{ //um repositório que armazena qualquer coisa em array
 	private Registro[] registros;
@@ -42,5 +41,13 @@ public class RepositorioArray extends Tabela{ //um repositório que armazena qual
 			this.registros[i] = (i == (this.qtdregistros - 1)) ? null : this.registros[i + saltos];
 		}
 		this.qtdregistros--;
+	}
+	
+	public void substitui(int id, Registro registro) {
+		for (int i = 0; i < this.qtdregistros; i++) {
+			if (this.registros[i].getId() == id) {
+				this.registros[i] = registro;
+			}
+		}
 	}
 }

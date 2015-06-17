@@ -1,6 +1,6 @@
 package lan.bd;
 
-public class Registro { //classe genérica que trata qualquer coisa (pessoa, produto, etc) que precise salvar em um repositório (seja ele que tipo for) da mesma forma
+public abstract class Registro { //classe genérica que trata qualquer coisa (pessoa, produto, etc) que precise salvar em um repositório (seja ele que tipo for) da mesma forma
 	private Tabela tabela;
 	private String[] valores;
 	protected int id; //referência para procura e exclusão
@@ -23,5 +23,15 @@ public class Registro { //classe genérica que trata qualquer coisa (pessoa, prod
 	
 	public void setTabela(Tabela tabela) {
 		this.tabela = tabela;
+	}
+	
+	public Tabela getTabela() {
+		return this.tabela;
+	}
+	
+	public abstract void setValores(String[] valores);
+	
+	public String[] getValores() {
+		return this.valores;
 	}
 }

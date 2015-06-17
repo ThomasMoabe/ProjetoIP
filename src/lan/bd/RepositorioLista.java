@@ -48,6 +48,14 @@ public class RepositorioLista extends Tabela{
 		}
 	}
 	
+	public void substitui(int id, Registro registro) {
+		if (this.registro.getId() == id) {
+			this.registro = registro;
+		} else if(this.proximo != null) {
+			this.proximo.substitui(id, registro);
+		}
+	}
+	
 	public Registro[] toArray() {
 		int qtdregistros = (this.registro == null) ? 0 : 1;
 		RepositorioLista proximo = this.proximo;
