@@ -11,6 +11,9 @@ public class Caixa2 {
 		tabelatransacoes.inserir((Registro)exemplo);
 		Registro[] teste = tabelatransacoes.procura("{id:1} {administrador:thomas}");
 		
+		tabelatransacoes.remove("{id:1}");
+		teste = tabelatransacoes.procura("{id:1} {administrador:thomas}");
+		
 		RegistroIterator varre = new RegistroIterator(teste);
 		
 		//testando iterator e imprimindo todos os resultados encontrados
