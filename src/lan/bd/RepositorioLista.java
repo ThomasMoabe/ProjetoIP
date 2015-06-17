@@ -1,6 +1,5 @@
 package lan.bd;
 
-import lan.caixa.RepositorioTransacoesLista;
 import lan.caixa.Transacao;
 
 public class RepositorioLista extends Tabela{
