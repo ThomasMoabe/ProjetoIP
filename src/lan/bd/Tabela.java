@@ -2,11 +2,22 @@ package lan.bd;
 
 public abstract class Tabela { //um repositório genérico que é tratado da mesma forma independente de ser array, lista ou excell
 	private String nome;
+	protected String[] tipos; //int, double, string, data
 	protected String[] campos; //id, nome,bendereço, etc
+	protected String classe;
 	
 	public Tabela(String nome, String[] campos) {
+		//this.nome = nome;
+		//this.campos = campos;
 		this.nome = nome;
-		this.campos = campos;
+		this.campos = new String[campos.length];
+		this.tipos = new String[campos.length];
+		this.classe = "!semclasse";
+		/*for (int i = 0; i < campos.length; i++) {
+			String[] tiposcampos = campos[i].split("-");
+			this.tipos[i] = tiposcampos[0].toLowerCase();
+			this.campos[i] = tiposcampos[1];
+		}System.out.println(campos.length);*/
 	}
 	
 	public String[] getCampos() {
@@ -81,7 +92,7 @@ public abstract class Tabela { //um repositório genérico que é tratado da mesma 
 		int posicaoatual = 0;
 		while(query.indexOf("{")>=0) {
 			query = query.substring(query.indexOf("{")+1);
-			String[] explodevalor = query.substring(0, query.indexOf("}")).split(":");
+			String[] explodevalor = query.substring(0, query.indexOf("}")).split("=");
 			explodida[posicaoatual][0] = explodevalor[0];
 			explodida[posicaoatual][1] = explodevalor[1];
 			posicaoatual++;

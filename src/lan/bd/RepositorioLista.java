@@ -5,11 +5,21 @@ import lan.caixa.Transacao;
 public class RepositorioLista extends Tabela{
 	private Registro registro;
 	private RepositorioLista proximo;
+	private RepositorioLista primeiro;
 	
 	public RepositorioLista(String nome, String[] campos) {
 		super(nome, campos);
 		this.registro = null;
 		this.proximo = null;
+		this.primeiro = this;
+		this.campos = campos;
+	}
+	
+	public RepositorioLista(String nome, String[] campos, RepositorioLista primeiro) {
+		super(nome, campos);
+		this.registro = null;
+		this.proximo = null;
+		this.primeiro = primeiro;
 		this.campos = campos;
 	}
 	
@@ -17,8 +27,11 @@ public class RepositorioLista extends Tabela{
 		registro.setTabela(this);
 		if (this.registro==null) {
 			this.registro = registro;
+			if (this.primeiro.classe.equals("!semclasse")) {
+				this.primeiro.classe = registro.getClass().getName();
+			}
 		} else if (this.proximo == null ){
-			this.proximo = new RepositorioLista(this.getNome(), this.getCampos());
+			this.proximo = new RepositorioLista(this.getNome(), this.getCampos(), this.primeiro);
 			this.proximo.inserir(registro);
 		} else {
 			this.proximo.inserir(registro);

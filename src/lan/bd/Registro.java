@@ -12,7 +12,7 @@ public abstract class Registro { //classe genérica que trata qualquer coisa (pes
 		String registro = "";
 		String[] campostabela = this.tabela.getCampos();
 		for (int i = 0; i < campostabela.length; i++) {
-			registro += "{" + campostabela[i] + ":" + this.valores[i] + "}";
+			registro += "{" + campostabela[i] + "=" + this.valores[i] + "}";
 		}
 		return registro;
 	}

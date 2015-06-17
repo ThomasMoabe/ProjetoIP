@@ -9,10 +9,10 @@ public class Caixa2 {
 		Tabela tabelatransacoes = banco.selecionatabela("transacoes");
 		Transacao exemplo = new Transacao(new String[] {String.valueOf(Transacao.idatual), "entrada", "fundo de caixa", "10.00", "10/10/2015" , "thomas"});
 		tabelatransacoes.inserir((Registro)exemplo);
-		Registro[] teste = tabelatransacoes.procura("{id:1} {administrador:thomas}");
+		Registro[] teste = tabelatransacoes.procura("{id=1} {administrador=thomas}");
 		
 		//tabelatransacoes.remove("{id:1}");
-		teste = tabelatransacoes.procura("{id:1} {administrador:thomas}");
+		teste = tabelatransacoes.procura("{id=1} {administrador=thomas}");
 		
 		RegistroIterator varreregistros = new RegistroIterator(teste);
 		
@@ -21,13 +21,12 @@ public class Caixa2 {
 			System.out.println(((Transacao)varreregistros.next()));
 		}
 		
-		tabelatransacoes.atualiza("{id:4} WHERE {id:1}");
+		tabelatransacoes.atualiza("{id=4} WHERE {id=1}");
 		
-		teste = tabelatransacoes.procura("{id:1} {administrador:thomas}");
+		teste = tabelatransacoes.procura("{id=1} {administrador=thomas}");
 		varreregistros = new RegistroIterator(teste);
 		while(varreregistros.hasNext()) {
 			System.out.println(((Transacao)varreregistros.next()));
 		}
-		
 	}
 }

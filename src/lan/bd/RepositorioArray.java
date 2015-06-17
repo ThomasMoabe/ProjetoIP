@@ -20,6 +20,9 @@ public class RepositorioArray extends Tabela{ //um repositório que armazena qual
 		}
 		registro.setTabela(this); //o registro precisa saber a que tabela pertence para validar os campos
 		this.registros[this.qtdregistros] = registro;
+		if(this.classe.equals("!semclasse")) {
+			this.classe = registro.getClass().getName();
+		}
 		this.qtdregistros++;
 	}
 	
