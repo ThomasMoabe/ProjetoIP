@@ -1,22 +1,23 @@
 package lan.caixa;
 import java.util.Date;
+import lan.bd.*;
 
-public class Transacao {
+public class Transacao extends Registro{
 	static int idatual = 1;
-	private int id;
 	private String tipo; //entrada/saida
 	private String descricao;
 	private double valor;
-	private Date data;
+	private String data;
 	private String administrador;
 	
-	public Transacao(String tipo, String descricao, double valor, String administrador) {
-		this.id = Transacao.idatual;
-		this.tipo = tipo;
-		this.descricao = descricao;
-		this.valor = valor;
-		this.data = new Date();
-		this.administrador = administrador;
+	public Transacao(String[] valores) {
+		super(valores);
+		this.id = Integer.parseInt(valores[0]);
+		this.tipo = valores[1];
+		this.descricao = valores[2];
+		this.valor = Double.parseDouble(valores[3]);
+		this.data = valores[4];
+		this.administrador = valores[5];
 		Transacao.idatual++;
 	}
 	
@@ -36,7 +37,7 @@ public class Transacao {
 		return this.valor;
 	}
 	
-	public Date getData() {
+	public String getData() {
 		return this.data;
 	}
 	
