@@ -11,13 +11,17 @@ public class RepositorioLista extends Tabela{
 		super(nome, campos);
 		this.registro = null;
 		this.proximo = null;
+		this.campos = campos;
 	}
 	
 	public void inserir(Registro registro) {
+		registro.setTabela(this);
 		if (this.registro==null) {
 			this.registro = registro;
-		} else {
+		} else if (this.proximo == null ){
 			this.proximo = new RepositorioLista(this.getNome(), this.getCampos());
+			this.proximo.inserir(registro);
+		} else {
 			this.proximo.inserir(registro);
 		}
 	}

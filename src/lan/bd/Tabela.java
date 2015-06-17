@@ -2,7 +2,7 @@ package lan.bd;
 
 public abstract class Tabela { //um repositório genérico que é tratado da mesma forma independente de ser array, lista ou excell
 	private String nome;
-	private String[] campos; //id, nome,bendereço, etc
+	protected String[] campos; //id, nome,bendereço, etc
 	
 	public Tabela(String nome, String[] campos) {
 		this.nome = nome;
@@ -20,7 +20,7 @@ public abstract class Tabela { //um repositório genérico que é tratado da mesma 
 	/*pesquisas em tabelas seguem a seguinte formatação de filtragem {campo:valor}, pode ser ultilizado mais de um filtro separando por espaço, a única condição suportada é a iguadade*/
 	public Registro[] procura(String parametros) {
 		String[] parametrosarray = parametros.split(" ");
-		RepositorioLista encontrados = new RepositorioLista("encontrados", new String[]{});
+		RepositorioLista encontrados = new RepositorioLista("encontrados", this.campos);
 		int indice = 0;
 		while (this.getRegistro(indice, 0) != null) { //varre todos os registros de forma genérica na tabela, independente do seu tipo
 			boolean insere = true;

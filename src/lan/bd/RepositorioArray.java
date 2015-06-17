@@ -17,10 +17,10 @@ public class RepositorioArray extends Tabela{ //um repositório que armazena qual
 			for (int i = 0; i < this.qtdregistros; i++) {
 				registrosmaior[i] = this.registros[i];
 			}
-			registrosmaior[qtdregistros] = registro;
-		} else {
-			this.registros[this.qtdregistros] = registro;
+			this.registros = registrosmaior;
 		}
+		registro.setTabela(this); //o registro precisa saber a que tabela pertence para validar os campos
+		this.registros[this.qtdregistros] = registro;
 		this.qtdregistros++;
 	}
 	
