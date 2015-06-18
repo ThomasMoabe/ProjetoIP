@@ -5,13 +5,11 @@ public abstract class Tabela { //um repositório genérico que é tratado da mesma 
 	protected String[] tipos; //int, double, string, data
 	protected String[] campos; //id, nome,bendereço, etc
 	protected String classe;
+	protected int idatual;
 	
 	public Tabela(String nome, String[] campos) {
-		//this.nome = nome;
-		//this.campos = campos;
 		this.nome = nome;
-		this.campos = new String[campos.length];
-		this.tipos = new String[campos.length];
+		this.campos = campos;
 		this.classe = "!semclasse";
 		/*for (int i = 0; i < campos.length; i++) {
 			String[] tiposcampos = campos[i].split("-");

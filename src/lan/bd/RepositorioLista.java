@@ -31,7 +31,7 @@ public class RepositorioLista extends Tabela{
 				this.primeiro.classe = registro.getClass().getName();
 			}
 		} else if (this.proximo == null ){
-			this.proximo = new RepositorioLista(this.getNome(), this.getCampos(), this.primeiro);
+			this.proximo = new RepositorioLista(this.getNome(), this.primeiro.getCampos(), this.primeiro);
 			this.proximo.inserir(registro);
 		} else {
 			this.proximo.inserir(registro);
