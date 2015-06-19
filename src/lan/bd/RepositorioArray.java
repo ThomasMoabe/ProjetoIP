@@ -48,7 +48,7 @@ public class RepositorioArray extends Tabela{ //um repositório que armazena qual
 	}
 	
 	public void substitui(int id, int idanterior, Registro registro) {
-		for (int i = 0; i < this.qtdregistros; i++) { System.out.println(id + " | " + this.registros[i].getId());
+		for (int i = 0; i < this.qtdregistros; i++) {
 			if (this.registros[i].getId() == id) {
 				this.registros[i] = registro;
 			}

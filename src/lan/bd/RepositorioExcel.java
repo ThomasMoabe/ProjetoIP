@@ -67,11 +67,11 @@ public class RepositorioExcel extends Tabela{
 			novalinha.createCell((short) 1).setCellValue(1);
 			novalinha = this.sheet.createRow(1);
 			for (int i = 0; i < this.campos.length; i++) {
-				novalinha.createCell(i).setCellValue(this.campos[i]); System.out.println("inserindo");
+				novalinha.createCell(i).setCellValue(this.campos[i]); //System.out.println("inserindo");
 			}
 			this.quantidaderegistros += 2; //adicionadas duas linhas de configuração
 		}
-		HSSFRow novalinha = this.sheet.createRow(this.quantidaderegistros); System.out.println("inserindo novo registro na linha " + this.quantidaderegistros);
+		HSSFRow novalinha = this.sheet.createRow(this.quantidaderegistros); //System.out.println("inserindo novo registro na linha " + this.quantidaderegistros);
 		for (int i = 0; i < registro.getValores().length; i++) {
 			novalinha.createCell(i).setCellValue(registro.getValores()[i]);
 		}

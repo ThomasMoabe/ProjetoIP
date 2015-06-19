@@ -1,9 +1,9 @@
 package lan.bd;
 
 public class BD { //um banco de dados genérico que armazena qualquer tipo de "tabela" (array, excel ou lista)
-	static BD banco;
-	static String tipobanco;
-	static String caminhoexcel = System.getProperty("user.dir") + System.getProperty("file.separator") + "LanDB.xls";
+	public static BD banco;
+	public static String tipobanco;
+	public static String caminhoexcel = System.getProperty("user.dir") + System.getProperty("file.separator") + "LanDB.xls";
 	private Tabela[] tabelas;
 	int qtdtabelas = 0;
 	

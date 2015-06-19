@@ -1,48 +1,36 @@
 package lan.caixa;
 
+import lan.bd.*;
+
 public class Caixa {
-	private double saldocache; //pra não percorrer toda hora as transações calculando o saldo
-	private RepositorioTransacao transacoes;
+	private double saldocache; //pra não varrer todos os registros sempre que receber um getSaldo()
+	private Tabela tabelatransacoes;
 	
-	public Caixa(String tipoarmazenamento) {
-		switch(tipoarmazenamento) {
-		case "array":
-			this.transacoes = new RepositorioTransacoesArray();
-			break;
-		case "lista":
-			this.transacoes = new RepositorioTransacoesLista();
-			break;
+	public Caixa() {
+		this.saldocache = 0;
+		BD.banco.novatabela("transacoes", new String[] {"id", "tipo", "descricao", "valor", "data", "administrador"}, BD.tipobanco);
+		this.tabelatransacoes = BD.banco.selecionatabela("transacoes");
+		Registro[] transacoes = tabelatransacoes.procura(""); //query vazia > pega todas as transações cadastradas na tabela
+		for (int i = 0; i < transacoes.length; i++) {
+			if (((Transacao) transacoes[i]).getTipo().equals("entrada")) {
+				this.saldocache += ((Transacao) transacoes[i]).getValor();
+			} else if (((Transacao) transacoes[i]).getTipo().equals("saida")) {
+				this.saldocache -= ((Transacao) transacoes[i]).getValor();
+			}
 		}
-		this.saldocache = transacoes.getSaldo();
 	}
 	
-	public void novaTransacao (String tipo, String descricao, double valor, String administrador) throws SaldoInsuficienteException {
-		if (tipo.equals("saida") && (saldocache-valor)<0) {
+	public void novatransacao(String tipo, String descricao, String valor, String data, String administrador) throws SaldoInsuficienteException {
+		String[] valores = {String.valueOf(this.tabelatransacoes.getIdAtual()), tipo, descricao, valor, data, administrador};
+		Transacao insere = new Transacao(valores);
+		if (insere.getTipo().equals("saida") && (this.saldocache - insere.getValor()) < 0) {
 			throw new SaldoInsuficienteException();
 		}
-		transacoes.inserir(tipo, descricao, valor, administrador);
-		this.saldocache = tipo.equals("entrada") ? (this.saldocache + valor) : (this.saldocache - valor);
-	}
-	
-	public Transacao procuraTransacao(int id) throws TransacaoNaoEncontradaException {
-		Transacao transacao = this.transacoes.procura(id);
-		if (transacao == null) {
-			throw new TransacaoNaoEncontradaException();
-		}
-		return transacao;
-	}
-	
-	public void removeTransacao(int id) throws TransacaoNaoEncontradaException {
-		Transacao remove = this.procuraTransacao(id);
-		this.transacoes.remove(id);
-		this.saldocache = remove.getTipo().equals("entrada") ? (this.saldocache - remove.getValor()) : (this.saldocache + remove.getValor());
+		this.saldocache += insere.getTipo().equals("entrada") ? insere.getValor() : -insere.getValor();
+		this.tabelatransacoes.inserir((Registro) insere);
 	}
 	
 	public double getSaldo() {
 		return this.saldocache;
-	}
-	
-	public Transacao[] getArrayTransacoes() { //formato unificado para laço de repetição da interface com o usuário
-		return this.transacoes.toArray();
 	}
 }
