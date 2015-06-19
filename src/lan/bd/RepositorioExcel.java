@@ -31,11 +31,15 @@ public class RepositorioExcel extends Tabela{
 			this.streamentrada = new FileInputStream(BD.caminhoexcel);
 			this.planilhaexcel = new HSSFWorkbook(this.streamentrada);
 			this.sheet = this.planilhaexcel.getSheet(nome);
-			this.idatual = (int) this.sheet.getRow(0).getCell(1).getNumericCellValue();
 			Iterator<Row> varrelinhas = this.sheet.rowIterator();
 			while(varrelinhas.hasNext()) {
 				varrelinhas.next();
 				this.quantidaderegistros++;
+			}
+			if (this.quantidaderegistros == 0) {
+				this.idatual = 1;
+			} else {
+				this.idatual = (int) this.sheet.getRow(0).getCell(1).getNumericCellValue();
 			}
 		} catch (FileNotFoundException e) {
 			try {
