@@ -3,7 +3,6 @@ import java.util.Date;
 import lan.bd.*;
 
 public class Transacao extends Registro{
-	static int idatual = 1;
 	private String tipo; //entrada/saida
 	private String descricao;
 	private double valor;
@@ -12,7 +11,7 @@ public class Transacao extends Registro{
 	
 	public Transacao(String[] valores) {
 		super(valores);
-		Transacao.idatual++;
+		this.setValores(valores);
 	}
 	
 	public void setValores(String[] valores) {

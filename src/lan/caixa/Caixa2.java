@@ -7,11 +7,11 @@ public class Caixa2 {
 		banco = new BD();
 		banco.novatabela("transacoes", new String[] {"id", "tipo", "descricao", "valor", "data", "administrador"}, "excel");
 		Tabela tabelatransacoes = banco.selecionatabela("transacoes");
-		Transacao exemplo = new Transacao(new String[] {String.valueOf(Transacao.idatual), "entrada", "fundo de caixa", "10.00", "10/10/2015" , "thomas"});
-		tabelatransacoes.inserir((Registro)exemplo);
-		/*Registro[] teste = tabelatransacoes.procura("{id=1} {administrador=thomas}");
+		Transacao exemplo = new Transacao(new String[] {String.valueOf(tabelatransacoes.getIdAtual()), "entrada", "fundo de caixa", "10.00", "10/10/2015" , "thomas"});
+		//tabelatransacoes.inserir((Registro)exemplo);
+		Registro[] teste = tabelatransacoes.procura("{id=1} {administrador=thomas}");
 		
-		//tabelatransacoes.remove("{id:1}");
+		tabelatransacoes.remove("{id=7}");
 		teste = tabelatransacoes.procura("{id=1} {administrador=thomas}");
 		
 		RegistroIterator varreregistros = new RegistroIterator(teste);
@@ -21,12 +21,12 @@ public class Caixa2 {
 			System.out.println(((Transacao)varreregistros.next()));
 		}
 		
-		tabelatransacoes.atualiza("{id=4} WHERE {id=1}");
+		tabelatransacoes.atualiza("{id=1} WHERE {id=4}");
 		
 		teste = tabelatransacoes.procura("{id=1} {administrador=thomas}");
 		varreregistros = new RegistroIterator(teste);
 		while(varreregistros.hasNext()) {
 			System.out.println(((Transacao)varreregistros.next()));
-		}*/
+		}
 	}
 }

@@ -11,6 +11,7 @@ public abstract class Tabela { //um repositório genérico que é tratado da mesma 
 		this.nome = nome;
 		this.campos = campos;
 		this.classe = "!semclasse";
+		this.idatual = 1;
 		/*for (int i = 0; i < campos.length; i++) {
 			String[] tiposcampos = campos[i].split("-");
 			this.tipos[i] = tiposcampos[0].toLowerCase();
@@ -26,20 +27,24 @@ public abstract class Tabela { //um repositório genérico que é tratado da mesma 
 		return this.nome;
 	}
 	
+	public int getIdAtual() {
+		return this.idatual;
+	}
 	/*pesquisas em tabelas seguem a seguinte formatação de filtragem {campo:valor}, pode ser ultilizado mais de um filtro separando por espaço, a única condição suportada é a iguadade*/
 	public Registro[] procura(String parametros) {
 		String[] parametrosarray = this.ExplodeParametros(parametros);
 		RepositorioLista encontrados = new RepositorioLista("encontrados", this.campos);
 		int indice = 0;
-		while (this.getRegistro(indice, 0) != null) { //varre todos os registros de forma genérica na tabela, independente do seu tipo
+		Registro atual;
+		while ((atual = this.getRegistro(indice, 0, this)) != null) { //varre todos os registros de forma genérica na tabela, independente do seu tipo
 			boolean insere = true;
 			for (int i = 0; i < parametrosarray.length && insere == true; i++) { //enquanto não encontrar um parâmetro que não satisfaça..
-				if (this.getRegistro(indice, 0).toString().indexOf(parametrosarray[i]) < 0) {
-					insere = false;
+				if (atual.toString().indexOf(parametrosarray[i]) < 0) {
+					insere = false; 
 				}
 			}
 			if (insere) {
-				encontrados.inserir(this.getRegistro(indice, 0));
+				encontrados.inserir(atual);
 			}
 			insere = true;
 			indice++;
@@ -55,7 +60,8 @@ public abstract class Tabela { //um repositório genérico que é tratado da mesma 
 	}
 	
 	public void atualiza(String query) {
-		query = query.replaceAll("\\s","");
+		query = query.replaceAll("}\\s","}");
+		query = query.replaceAll("\\s\\{","{");
 		if(query.toLowerCase().indexOf("}where{") > 0) {
 			query = query.replaceAll("WHERE","where");
 			String[] separa = query.split("where");
@@ -63,13 +69,14 @@ public abstract class Tabela { //um repositório genérico que é tratado da mesma 
 			String[][] valoresmudanca = this.ExplodeQuery(separa[0]);
 			for(int i=0;i<registrosmuda.length;i++) { //percorre todos os registros que deve atualizar
 				String[] valoresatuais = registrosmuda[i].getValores();
+				int idanterior = registrosmuda[i].getId(); //previne caso seja uma mudança de ID que é usado para substituir, no caso do excel não funcionaria pelo fato do objeto não estar em memória, por isso a tabela excel deve substituir sempre pelo id anterior
 				for (int j = 0; j < valoresmudanca.length; j++) {
 					int posicaovalor = this.getPosicaoCampo(valoresmudanca[j][0]);
 					String novovalor = valoresmudanca[j][1];
 					valoresatuais[posicaovalor] = novovalor;
 				}
 				registrosmuda[i].setValores(valoresatuais);
-				this.substitui(registrosmuda[i].getId(), registrosmuda[i]);
+				this.substitui(registrosmuda[i].getId(), idanterior, registrosmuda[i]);
 			}
 		}
 	}
@@ -84,7 +91,7 @@ public abstract class Tabela { //um repositório genérico que é tratado da mesma 
 		return posicao;
 	}
 	
-	public String[][] ExplodeQuery(String query) {
+	private String[][] ExplodeQuery(String query) {
 		int count = query.length() - query.replace("{", "").length();
 		String[][] explodida = new String[count][2];
 		int posicaoatual = 0;
@@ -98,8 +105,9 @@ public abstract class Tabela { //um repositório genérico que é tratado da mesma 
 		return explodida;
 	}
 	
-	public String[] ExplodeParametros(String query) {
-		query = query.replaceAll("\\s","");
+	private String[] ExplodeParametros(String query) {
+		query = query.replaceAll("}\\s","}");
+		query = query.replaceAll("\\s\\{","{");
 		int count = query.length() - query.replace("{", "").length();
 		String[] parametros = new String[count];
 		int posicaoatual = 0;
@@ -111,8 +119,8 @@ public abstract class Tabela { //um repositório genérico que é tratado da mesma 
 		return parametros;
 	}
 	
-	public abstract Registro getRegistro(int indice, int saltos); //procura indice x a partir do 0
+	public abstract Registro getRegistro(int indice, int saltos, Tabela tabela); //procura indice x a partir do 0 OBS 2  //passa a própria tabela para o excel
 	public abstract void removeporid(int id);
 	public abstract void inserir(Registro registro);
-	public abstract void substitui(int id, Registro registro);
+	public abstract void substitui(int id, int idanterior, Registro registro);
 }

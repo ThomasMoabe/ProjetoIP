@@ -24,9 +24,10 @@ public class RepositorioArray extends Tabela{ //um repositório que armazena qual
 			this.classe = registro.getClass().getName();
 		}
 		this.qtdregistros++;
+		this.idatual++;
 	}
 	
-	public Registro getRegistro(int indice, int saltos) {
+	public Registro getRegistro(int indice, int saltos, Tabela tabela) {
 		Registro encontrado = null;
 		for (int i = 0; i < this.qtdregistros; i++) {
 			if (i==indice) {
@@ -46,8 +47,8 @@ public class RepositorioArray extends Tabela{ //um repositório que armazena qual
 		this.qtdregistros--;
 	}
 	
-	public void substitui(int id, Registro registro) {
-		for (int i = 0; i < this.qtdregistros; i++) {
+	public void substitui(int id, int idanterior, Registro registro) {
+		for (int i = 0; i < this.qtdregistros; i++) { System.out.println(id + " | " + this.registros[i].getId());
 			if (this.registros[i].getId() == id) {
 				this.registros[i] = registro;
 			}

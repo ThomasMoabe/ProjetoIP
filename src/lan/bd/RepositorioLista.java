@@ -36,14 +36,15 @@ public class RepositorioLista extends Tabela{
 		} else {
 			this.proximo.inserir(registro);
 		}
+		this.primeiro.idatual++;
 	}
 	
-	public Registro getRegistro(int indice, int saltos) {
+	public Registro getRegistro(int indice, int saltos, Tabela tabela) {
 		Registro registro = null;
 		if (indice == saltos) {
 			registro = this.registro;
 		} else if (this.proximo != null) {
-			registro = this.proximo.getRegistro(indice, saltos+1);
+			registro = this.proximo.getRegistro(indice, saltos+1, tabela);
 		}
 		return registro;
 	}
@@ -61,11 +62,11 @@ public class RepositorioLista extends Tabela{
 		}
 	}
 	
-	public void substitui(int id, Registro registro) {
+	public void substitui(int id, int idanterior, Registro registro) {
 		if (this.registro.getId() == id) {
 			this.registro = registro;
 		} else if(this.proximo != null) {
-			this.proximo.substitui(id, registro);
+			this.proximo.substitui(id, idanterior, registro);
 		}
 	}
 	
