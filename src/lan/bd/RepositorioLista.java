@@ -30,13 +30,13 @@ public class RepositorioLista extends Tabela{
 			if (this.primeiro.classe.equals("!semclasse")) {
 				this.primeiro.classe = registro.getClass().getName();
 			}
+			this.primeiro.idatual++;
 		} else if (this.proximo == null ){
 			this.proximo = new RepositorioLista(this.getNome(), this.primeiro.getCampos(), this.primeiro);
 			this.proximo.inserir(registro);
 		} else {
 			this.proximo.inserir(registro);
 		}
-		this.primeiro.idatual++;
 	}
 	
 	public Registro getRegistro(int indice, int saltos, Tabela tabela) {
