@@ -9,9 +9,9 @@ public class Caixa {
 	
 	public Caixa() {
 		this.saldocache = 0;
-		BD.banco.novatabela("transacoes", new String[] {"id", "tipo", "descricao", "valor", "data", "hora", "administrador"}, BD.tipobanco);
+		BD.banco.novatabela("transacoes", new String[] {"(int)id", "(string)tipo", "(string)descricao", "(double)valor", "(data)data", "(hora)hora", "(string)administrador"}, BD.tipobanco);
 		this.tabelatransacoes = BD.banco.selecionatabela("transacoes");
-		Registro[] transacoes = tabelatransacoes.procura(""); //query vazia > pega todas as transações cadastradas na tabela
+		Registro[] transacoes = this.tabelatransacoes.procura(""); //query vazia > pega todas as transações cadastradas na tabela
 		for (int i = 0; i < transacoes.length; i++) {
 			if (((Transacao) transacoes[i]).getTipo().equals("entrada")) {
 				this.saldocache += ((Transacao) transacoes[i]).getValor();
@@ -32,7 +32,7 @@ public class Caixa {
 	}
 	
 	public void removetransacao(String id, String administrador) throws TransacaoNaoEncontradaException { //por motivos de $egurança, este método tem efeito de estorno, a remoção de uma entrada significa a adição de um estorno de saída, o contrário também
-		Registro[] transacoes = tabelatransacoes.procura("{id=" + id + "}");
+		Registro[] transacoes = this.tabelatransacoes.procura("{id=" + id + "}");
 		if (transacoes.length == 0) {
 			throw new TransacaoNaoEncontradaException();
 		} else {
@@ -41,6 +41,12 @@ public class Caixa {
 			Transacao insere = new Transacao(valoresinsere);
 			this.tabelatransacoes.inserir(insere);
 		}
+	}
+	
+	public ConsultaTransacoes procuratransacao(String datainicial, String datafinal, String tipo) { //ex 20/06/2015 até 22/06/2015 saída
+		String queryprocura = "{data>=" + datainicial + "}{data<=" + datafinal + "}" + (tipo.toLowerCase().equals("todas") ? "" : ("{tipo=" + tipo.toLowerCase() + "}"));
+		Registro[] transacoes = this.tabelatransacoes.procura(queryprocura);
+		return new ConsultaTransacoes(transacoes);
 	}
 	
 	public TransacaoIterator iterator() {

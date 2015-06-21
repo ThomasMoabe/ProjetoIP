@@ -1,7 +1,5 @@
 package lan.bd;
 
-import lan.caixa.Transacao;
-
 public class RepositorioLista extends Tabela{
 	private Registro registro;
 	private RepositorioLista proximo;
@@ -12,7 +10,7 @@ public class RepositorioLista extends Tabela{
 		this.registro = null;
 		this.proximo = null;
 		this.primeiro = this;
-		this.campos = campos;
+		//this.campos = campos;
 	}
 	
 	public RepositorioLista(String nome, String[] campos, RepositorioLista primeiro) {
@@ -20,7 +18,7 @@ public class RepositorioLista extends Tabela{
 		this.registro = null;
 		this.proximo = null;
 		this.primeiro = primeiro;
-		this.campos = campos;
+		//this.campos = campos;
 	}
 	
 	public void inserir(Registro registro) {
@@ -32,7 +30,7 @@ public class RepositorioLista extends Tabela{
 			}
 			this.primeiro.idatual++;
 		} else if (this.proximo == null ){
-			this.proximo = new RepositorioLista(this.getNome(), this.primeiro.getCampos(), this.primeiro);
+			this.proximo = new RepositorioLista(this.getNome(), this.primeiro.getCamposTipos(), this.primeiro); //getCampos()
 			this.proximo.inserir(registro);
 		} else {
 			this.proximo.inserir(registro);

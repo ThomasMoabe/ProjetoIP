@@ -1,5 +1,6 @@
-package lan.caixa;
+package lan.testes;
 import lan.bd.*;
+import lan.caixa.Transacao;
 
 public class Caixa2 {
 	BD banco;

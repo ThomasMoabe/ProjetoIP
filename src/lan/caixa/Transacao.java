@@ -1,5 +1,4 @@
 package lan.caixa;
-import java.util.Date;
 import lan.bd.*;
 
 public class Transacao extends Registro{
@@ -7,6 +6,7 @@ public class Transacao extends Registro{
 	private String descricao;
 	private double valor;
 	private String data;
+	private String hora;
 	private String administrador;
 	
 	public Transacao(String[] valores) {
@@ -20,7 +20,8 @@ public class Transacao extends Registro{
 		this.descricao = valores[2];
 		this.valor = Double.parseDouble(valores[3]);
 		this.data = valores[4];
-		this.administrador = valores[5];
+		this.hora = valores[5];
+		this.administrador = valores[6];
 	}
 	
 	public int getId() {
@@ -43,6 +44,9 @@ public class Transacao extends Registro{
 		return this.data;
 	}
 	
+	public String getHora() {
+		return this.hora;
+	}
 	public String getAdministrador() {
 		return this.administrador;
 	}
