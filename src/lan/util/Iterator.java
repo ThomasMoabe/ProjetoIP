@@ -1,4 +1,4 @@
-package lan.bd;
+package lan.util;
 
 public interface Iterator {
 	public Object next();

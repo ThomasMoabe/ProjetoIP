@@ -1,5 +1,7 @@
 package lan.caixa;
 import lan.bd.*;
+import lan.util.Iterator;
+
 import java.util.Arrays;
 
 public class TransacaoIterator implements Iterator{

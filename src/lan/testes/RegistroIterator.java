@@ -1,4 +1,7 @@
-package lan.bd;
+package lan.testes;
+
+import lan.bd.Registro;
+import lan.util.Iterator;
 
 public class RegistroIterator implements Iterator{
 	Registro[] registros;
