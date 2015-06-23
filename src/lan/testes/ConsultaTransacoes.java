@@ -1,5 +1,6 @@
-package lan.server.caixa;
+package lan.testes;
 import lan.server.bd.Registro;
+import lan.server.caixa.TransacaoIterator;
 
 public class ConsultaTransacoes {
 	private Registro[] registros;

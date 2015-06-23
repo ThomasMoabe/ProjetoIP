@@ -43,10 +43,10 @@ public class Caixa {
 		}
 	}
 	
-	public ConsultaTransacoes procuratransacao(String datainicial, String datafinal, String tipo) { //ex 20/06/2015 até 22/06/2015 saída
+	public TransacaoIterator procuratransacao(String datainicial, String datafinal, String tipo) { //ex 20/06/2015 até 22/06/2015 saída
 		String queryprocura = "{data>=" + datainicial + "}{data<=" + datafinal + "}" + (tipo.toLowerCase().equals("todas") ? "" : ("{tipo=" + tipo.toLowerCase() + "}"));
 		Registro[] transacoes = this.tabelatransacoes.procura(queryprocura);
-		return new ConsultaTransacoes(transacoes);
+		return new TransacaoIterator(transacoes); //retornava ConsultaTransacoes
 	}
 	
 	public TransacaoIterator iterator() {

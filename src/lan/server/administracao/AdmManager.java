@@ -7,13 +7,14 @@ import lan.server.bd.*;
 public class AdmManager {
 	private Tabela tabelaadministradores;
 	
-	public AdmManager() throws NenhumAdministradorCadastradoException {
+	public AdmManager() {
 		BD.banco.novatabela("administradores", new String[] {"(int)id", "(string)login", "(string)nome", "(string)senha"}, BD.tipobanco);
 		this.tabelaadministradores = BD.banco.selecionatabela("administradores");
+	}
+	
+	public boolean liberalogin() { //pra liberar o login deve existir pelo menos um administrador cadastrado
 		Registro[] adminscadastrados = this.tabelaadministradores.procura("");
-		if (adminscadastrados.length == 0) {
-			throw new NenhumAdministradorCadastradoException();
-		}
+		return adminscadastrados.length == 0 ? false : true;
 	}
 	
 	public Administrador login(String login, String senha) throws AdministradorInvalidoException {

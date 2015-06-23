@@ -20,6 +20,14 @@ public class ServicosManager {
 		this.tabelaservicos.remove("{id=" + id + "}");
 	}
 	
+	public Servico procura(String id) throws ServicoNaoEncontradoException {
+		Registro[] servico = this.tabelaservicos.procura("{id=" + id + "}");
+		if (servico.length == 0) {
+			throw new ServicoNaoEncontradoException();
+		}
+		return (Servico) servico[0];
+	}
+	
 	public ServicoIterator iterator() {
 		Registro[] servicosdisponiveis = this.tabelaservicos.procura("");
 		return new ServicoIterator(servicosdisponiveis);
