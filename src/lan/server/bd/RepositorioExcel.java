@@ -31,6 +31,9 @@ public class RepositorioExcel extends Tabela{
 			this.streamentrada = new FileInputStream(BD.caminhoexcel);
 			this.planilhaexcel = new HSSFWorkbook(this.streamentrada);
 			this.sheet = this.planilhaexcel.getSheet(nome);
+			if (this.sheet == null) { //se a planilha não existe cria uma
+				this.sheet = this.planilhaexcel.createSheet(nome);
+			}
 			Iterator<Row> varrelinhas = this.sheet.rowIterator();
 			while(varrelinhas.hasNext()) {
 				varrelinhas.next();
