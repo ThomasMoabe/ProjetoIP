@@ -1,4 +1,4 @@
-package lan.caixa;
+package lan.server.caixa;
 
 public class SaldoInsuficienteException extends Exception{
 	public SaldoInsuficienteException() {

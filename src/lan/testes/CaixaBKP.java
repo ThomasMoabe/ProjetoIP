@@ -1,8 +1,8 @@
 package lan.testes;
 
-import lan.caixa.SaldoInsuficienteException;
-import lan.caixa.Transacao;
-import lan.caixa.TransacaoNaoEncontradaException;
+import lan.server.caixa.SaldoInsuficienteException;
+import lan.server.caixa.Transacao;
+import lan.server.caixa.TransacaoNaoEncontradaException;
 
 public class CaixaBKP {
 	private double saldocache; //pra não percorrer toda hora as transações calculando o saldo

@@ -1,4 +1,4 @@
-package lan.administracao;
+package lan.server.administracao;
 
 public class NenhumAdministradorCadastradoException extends Exception {
 	public NenhumAdministradorCadastradoException() {

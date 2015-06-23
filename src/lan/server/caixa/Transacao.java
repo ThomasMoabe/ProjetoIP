@@ -1,5 +1,5 @@
-package lan.caixa;
-import lan.bd.*;
+package lan.server.caixa;
+import lan.server.bd.*;
 
 public class Transacao extends Registro{
 	private String tipo; //entrada/saida

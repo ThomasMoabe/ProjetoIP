@@ -1,4 +1,4 @@
-package lan.util;
+package lan.server.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

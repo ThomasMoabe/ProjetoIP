@@ -1,4 +1,4 @@
-package lan.bd;
+package lan.server.bd;
 
 public abstract class Registro { //classe genérica que trata qualquer coisa (pessoa, produto, etc) que precise salvar em um repositório (seja ele que tipo for) da mesma forma
 	private Tabela tabela;

@@ -1,4 +1,4 @@
-package lan.bd;
+package lan.server.bd;
 
 public class RepositorioLista extends Tabela{
 	private Registro registro;

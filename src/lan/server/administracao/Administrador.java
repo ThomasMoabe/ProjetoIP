@@ -1,6 +1,6 @@
-package lan.administracao;
+package lan.server.administracao;
 
-import lan.bd.Registro;
+import lan.server.bd.Registro;
 
 public class Administrador extends Registro{
 	private String login;

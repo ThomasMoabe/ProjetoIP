@@ -1,4 +1,4 @@
-package lan.administracao;
+package lan.server.administracao;
 
 public class AdministradorJaCadastradoException extends Exception { //se for a primeira execução do programa pede para realizar o cadastro do primeiro administrador
 	public AdministradorJaCadastradoException() {

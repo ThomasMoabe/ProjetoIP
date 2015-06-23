@@ -1,4 +1,4 @@
-package lan.bd;
+package lan.server.bd;
 
 public abstract class Tabela { //um repositório genérico que é tratado da mesma forma independente de ser array, lista ou excell
 	private String nome;

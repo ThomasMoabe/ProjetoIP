@@ -1,7 +1,7 @@
 package lan.testes;
 
-import lan.bd.Registro;
-import lan.util.Iterator;
+import lan.server.bd.Registro;
+import lan.server.util.Iterator;
 
 public class RegistroIterator implements Iterator{
 	Registro[] registros;

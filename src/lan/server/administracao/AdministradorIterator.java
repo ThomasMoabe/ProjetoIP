@@ -1,7 +1,7 @@
-package lan.administracao;
+package lan.server.administracao;
 
-import lan.bd.*;
-import lan.util.Iterator;
+import lan.server.bd.*;
+import lan.server.util.Iterator;
 
 import java.util.Arrays;
 

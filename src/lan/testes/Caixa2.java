@@ -1,6 +1,6 @@
 package lan.testes;
-import lan.bd.*;
-import lan.caixa.Transacao;
+import lan.server.bd.*;
+import lan.server.caixa.Transacao;
 
 public class Caixa2 {
 	BD banco;

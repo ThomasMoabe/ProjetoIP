@@ -1,4 +1,4 @@
-package lan.bd;
+package lan.server.bd;
 
 public class RepositorioArray extends Tabela{ //um repositório que armazena qualquer coisa em array
 	private Registro[] registros;

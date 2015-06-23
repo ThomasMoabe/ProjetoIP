@@ -1,7 +1,7 @@
-package lan.caixa;
+package lan.server.caixa;
 
-import lan.bd.*;
-import lan.util.DataHora;
+import lan.server.bd.*;
+import lan.server.util.DataHora;
 
 public class Caixa {
 	private double saldocache; //pra não varrer todos os registros sempre que receber um getSaldo()

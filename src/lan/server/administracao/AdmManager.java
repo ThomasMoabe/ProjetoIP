@@ -1,7 +1,8 @@
-package lan.administracao;
+package lan.server.administracao;
 
 import java.util.regex.Pattern;
-import lan.bd.*;
+
+import lan.server.bd.*;
 
 public class AdmManager {
 	private Tabela tabelaadministradores;

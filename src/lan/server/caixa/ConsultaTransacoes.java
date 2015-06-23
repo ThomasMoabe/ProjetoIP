@@ -1,5 +1,5 @@
-package lan.caixa;
-import lan.bd.Registro;
+package lan.server.caixa;
+import lan.server.bd.Registro;
 
 public class ConsultaTransacoes {
 	private Registro[] registros;

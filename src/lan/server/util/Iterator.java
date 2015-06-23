@@ -1,4 +1,4 @@
-package lan.util;
+package lan.server.util;
 
 public interface Iterator {
 	public Object next();

@@ -1,4 +1,4 @@
-package lan.bd;
+package lan.server.bd;
 
 public class BD { //um banco de dados genérico que armazena qualquer tipo de "tabela" (array, excel ou lista)
 	public static BD banco;

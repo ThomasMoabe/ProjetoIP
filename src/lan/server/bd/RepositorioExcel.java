@@ -1,4 +1,4 @@
-package lan.bd;
+package lan.server.bd;
 
 import java.io.FileNotFoundException;
 import java.io.FileInputStream;
