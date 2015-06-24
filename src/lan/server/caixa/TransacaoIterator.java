@@ -15,7 +15,7 @@ public class TransacaoIterator implements Iterator{
 	
 	public boolean hasNext() {
 		boolean temproximo = true;
-		if (registroatual == transacoes.length) {
+		if (registroatual == this.transacoes.length) {
 			temproximo = false;
 		}
 		return temproximo;

@@ -5,12 +5,14 @@ import lan.server.administracao.*;
 import lan.server.servicos.*;
 import lan.server.util.*;
 import lan.server.caixa.*;
+import lan.server.produtos.*;
 
 public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai fazer
 	private Config config;
 	private AdmManager adm;
 	private ServicosManager srvmanager;
 	private Caixa caixa;
+	private ProdutosManager produtos;
 	
 	public Lan() {
 		this.config = new Config();
@@ -34,6 +36,7 @@ public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai
 			this.usuariosistema = this.adm.login(login, senha);
 			this.srvmanager = new ServicosManager();
 			this.caixa = new Caixa();
+			this.produtos = new ProdutosManager();
 		}
 		
 		public void deletaAdministrador(String id) throws ImpossivelDeletarAdministradorException { //exceção caso o administrador tente excluir ele mesmo
@@ -69,6 +72,38 @@ public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai
 		}
 		
 //	} fim do bloco de caixa
+
+//	{ início do bloco de produtos
+		
+		/* Relacionado as suas categorias */
+		
+		public void novaCategoriaProdutos(String descricao, double precohora) {
+			this.produtos.inserircategoria(descricao, precohora);
+		}
+		
+		public void atualizaCategoriaProdutos(String id, String descricao, double precohora) {
+			this.produtos.atualizarcategoria(id, descricao, precohora);
+		}
+		
+		public void deletaCategoriaProdutos(String id) {
+			this.produtos.deletarcategoria(id);
+		}
+		
+		public CategoriaIterator iteratorCategoriasProdutos() {
+			return this.produtos.iteratorCategorias();
+		}
+		
+		/* Os produtos em si */
+		
+		public void novoProduto(String idcategoria, String nome, String tipo) {
+			this.produtos.inserirproduto(idcategoria, nome, tipo);
+		}
+		
+		public void deletaProduto(String id) {
+			this.produtos.deletarproduto(id);
+		}
+		
+//	} fim do bloco de produtos
 		
 //	{ início do bloco de serviços
 		
