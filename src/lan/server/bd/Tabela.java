@@ -138,7 +138,6 @@ public abstract class Tabela { //um repositório genérico que é tratado da mesma 
 				}
 			}
 		}
-		System.out.println("ordenando");
 		return registros;
 	}
 	
@@ -179,9 +178,7 @@ public abstract class Tabela { //um repositório genérico que é tratado da mesma 
 		switch (tipo) {
 		case "string":
 			if ((condicao.indexOf(campo + "=") > -1) && (condicao.indexOf("=") == campo.length())) { //na string é preciso ter mais cuidado, pois os operadores podem estar na própria palavra, dessa forma fica garantida a posição do sinal
-				String valoratualstring = ignorecase ? valoratual.toLowerCase() : valoratual;
-				String valorcomparastring = ignorecase ? condicaovalor.toLowerCase() : condicaovalor;
-				insere = valoratualstring.matches(valorcomparastring);
+				insere = ignorecase? valoratual.matches("(?i)" + condicaovalor) : valoratual.matches(condicaovalor);
 			} else if (((condicao.indexOf(campo + ">") > -1) && (condicao.indexOf(">") == campo.length()) || (condicao.indexOf(campo + ">=") > -1) && (condicao.indexOf(">=") == campo.length())) & !(inverte = false) ||
 						((condicao.indexOf(campo + "<") > -1) && (condicao.indexOf("<") == campo.length()) || (condicao.indexOf(campo + "<=") > -1) && (condicao.indexOf("<=") == campo.length())) & (inverte = true)) {
 				String stringmaior;

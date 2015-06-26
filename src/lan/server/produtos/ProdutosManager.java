@@ -43,8 +43,8 @@ public class ProdutosManager {
 		this.tabelaprodutos.remove("{id=" + id + "}");
 	}
 	
-	public ProdutoIterator iteratorProdutos() {
-		Registro[] produtosdisponiveis = this.tabelaprodutos.procura("");
+	public ProdutoIterator iteratorProdutos(String idcategoria) {
+		Registro[] produtosdisponiveis = this.tabelaprodutos.procura("{idcategoria=" + idcategoria + "}");
 		return new ProdutoIterator(produtosdisponiveis);
 	}
 }

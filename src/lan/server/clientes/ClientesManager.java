@@ -1,5 +1,7 @@
 package lan.server.clientes;
 
+import java.util.regex.Pattern;
+
 import lan.server.bd.*;
 import lan.server.util.DataHora;
 
@@ -11,26 +13,53 @@ public class ClientesManager {
 		this.tabelaclientes = BD.banco.selecionatabela("clientes");
 	}
 	
-	public void cadastracliente(String login, String nome, String endereco, String email, String senha, String datanascimento) throws ClienteJaCadastradoException, ClienteLoginInvalidoException, ClienteSenhaFracaException, ClienteValorObrigatorioException {
+	public void cadastraAtualizaCliente(String id, String login, String nome, String endereco, String email, String senha, String datanascimento) throws ClienteJaCadastradoException, ClienteLoginInvalidoException, ClienteSenhaFracaException, ClienteValorObrigatorioException { //este método serve tanto para cadastrar quanto para atualizar um novo cliente, a única diferença é que um novo cadastro deve ter id com valor 0
 		Registro[] jacadastrado = this.tabelaclientes.procura("{login=" + login + "}");
-		if(login.length() == 0
-			|| nome.length() == 0
-			|| email.length() == 0
-			|| senha.length() == 0
-			|| datanascimento.length() == 0) {
-			throw new ClienteValorObrigatorioException();
-		} else if (jacadastrado.length > 0) { //o login deve ser único
+		ClienteValorObrigatorioException excessaovalornulo = new ClienteValorObrigatorioException();
+		if((login.length() == 0 && excessaovalornulo.adicionarValorNulo("Login"))
+			| (nome.length() == 0 && excessaovalornulo.adicionarValorNulo("Nome"))
+			| (email.length() == 0 && excessaovalornulo.adicionarValorNulo("E-mail"))
+			| (senha.length() == 0 && excessaovalornulo.adicionarValorNulo("Senha"))
+			| (datanascimento.length() == 0 && excessaovalornulo.adicionarValorNulo("Data de nascimento"))) {
+			throw excessaovalornulo;
+		} else if (jacadastrado.length > 0 && !String.valueOf(((Cliente) jacadastrado[0]).getId()).endsWith(id)) { //o login deve ser único, se o login já existir, mas o ID do usuário desse login for o mesmo que foi passado como parâmetro então ignora pois se trata de um update
 			throw new ClienteJaCadastradoException();
 		} else if (!login.matches("^[a-z]*[A-Z]*_*[0-9]*$") || login.length() < 4)  {
 			throw new ClienteLoginInvalidoException();
 		} else if(senha.length() < 4) {
 			throw new ClienteSenhaFracaException();
 		}
-		else {
+		else if (id.equals("0")) {
 			String[] valores = {String.valueOf(this.tabelaclientes.getIdAtual()), login, nome, endereco, email, senha, DataHora.getData(), datanascimento};
 			Cliente novo = new Cliente(valores);
 			this.tabelaclientes.inserir((Registro) novo);
-			System.out.println("cliente inserido");
+		}
+		else {
+			String queryatualiza = "{login=" + login + "}{nome=" + nome + "}{endereco=" + endereco + "}{email=" + email + "}{senha=" + senha + "}{datanascimento=" + datanascimento + "} WHERE {id=" + id + "}";
+			this.tabelaclientes.atualiza(queryatualiza);
 		}
 	}
+	
+	public void deletaCliente(String id) {
+		this.tabelaclientes.remove("{id=" + id + "}");
+	}
+	
+	public ClienteIterator procuraClientes(String parametros) { // "parâmetros" pois vai servir tanto pra procurar pelo nome como login ultilizando a mesma variável se houver 4 ou mais caracteres
+		parametros = Pattern.quote(parametros);
+		String query = "{nome=" + parametros + ".*}" + (parametros.length() >= 4 ? " OR {login=" + parametros + ".*}" : "" + " ORDER BY nome ACS");
+		Registro[] clientesencontrados = this.tabelaclientes.procuraIgnoreCase(query);
+		return new ClienteIterator(clientesencontrados);
+	}
+	
+	public Cliente getCliente(String id) {
+		Registro[] clientearray = this.tabelaclientes.procura("{id=" + id + "}");
+		Cliente cliente = (Cliente) clientearray[0];
+		return cliente;
+	}
+	
+	public ClienteIterator iteratorCliente() {
+		Registro[] clientescadastrados = this.tabelaclientes.procura("");
+		return new ClienteIterator(clientescadastrados);
+	}
+	
 }

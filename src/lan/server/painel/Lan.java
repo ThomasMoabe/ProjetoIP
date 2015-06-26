@@ -6,6 +6,7 @@ import lan.server.servicos.*;
 import lan.server.util.*;
 import lan.server.caixa.*;
 import lan.server.produtos.*;
+import lan.server.clientes.*;
 
 public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai fazer
 	private Config config;
@@ -13,6 +14,7 @@ public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai
 	private ServicosManager srvmanager;
 	private Caixa caixa;
 	private ProdutosManager produtos;
+	private ClientesManager clientes;
 	
 	public Lan() throws ConfiguracaoInvalidaException {
 		this.config = new Config();
@@ -37,6 +39,7 @@ public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai
 			this.srvmanager = new ServicosManager();
 			this.caixa = new Caixa();
 			this.produtos = new ProdutosManager();
+			this.clientes = new ClientesManager();
 		}
 		
 		public void deletaAdministrador(String id) throws ImpossivelDeletarAdministradorException { //exceção caso o administrador tente excluir ele mesmo
@@ -103,6 +106,10 @@ public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai
 			this.produtos.deletarproduto(id);
 		}
 		
+		public ProdutoIterator iteratorProduto(String idcategoria) {
+			return this.produtos.iteratorProdutos(idcategoria);
+		}
+		
 //	} fim do bloco de produtos
 		
 //	{ início do bloco de serviços
@@ -127,4 +134,28 @@ public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai
 		}
 		
 //	} fim do bloco de serviços
+		
+//	{ início do bloco de clientes
+		
+		public void cadastraAtualizaCliente(String id, String login, String nome, String endereco, String email, String senha, String datanascimento) throws ClienteJaCadastradoException, ClienteLoginInvalidoException, ClienteSenhaFracaException, ClienteValorObrigatorioException {
+			this.clientes.cadastraAtualizaCliente(id, login, nome, endereco, email, senha, datanascimento);
+		}
+		
+		public void deletaCliente(String id) {
+			this.clientes.deletaCliente(id);
+		}
+		
+		public ClienteIterator procuraClientes(String parametros) {
+			return this.clientes.procuraClientes(parametros);
+		}
+		
+		public Cliente getCliente(String id) {
+			return this.clientes.getCliente(id);
+		}
+		
+		public ClienteIterator iteratorClientes() {
+			return this.clientes.iteratorCliente();
+		}
+		
+//	} fim do bloco de clientes
 }
