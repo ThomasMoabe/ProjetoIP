@@ -197,7 +197,7 @@ public abstract class Tabela { //um repositório genérico que é tratado da mesma 
 				boolean definicao = false;
 				for (int i = 0; i < stringmenor.length() && definicao == false; i++) {
 					if (stringmenor.toLowerCase().charAt(i) != stringmaior.toLowerCase().charAt(i)) {
-						definicao = true; System.out.println(inverte);
+						definicao = true;
 						insere = stringmenor.toLowerCase().charAt(i) < stringmaior.toLowerCase().charAt(i) ? (!inverte) : (inverte);
 					} else {
 						insere = true;
