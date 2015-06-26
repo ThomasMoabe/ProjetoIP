@@ -1,4 +1,4 @@
-package lan.testes;
+package lan.server.testes;
 import lan.server.bd.*;
 import lan.server.caixa.Transacao;
 

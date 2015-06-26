@@ -14,7 +14,7 @@ public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai
 	private Caixa caixa;
 	private ProdutosManager produtos;
 	
-	public Lan() {
+	public Lan() throws ConfiguracaoInvalidaException {
 		this.config = new Config();
 		BD.banco = new BD();
 		BD.tipobanco = this.config.getTipoBanco();
