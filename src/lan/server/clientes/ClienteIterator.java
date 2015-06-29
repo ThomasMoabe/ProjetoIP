@@ -3,7 +3,6 @@ package lan.server.clientes;
 import java.util.Arrays;
 
 import lan.server.bd.Registro;
-import lan.server.produtos.Produto;
 import lan.server.util.Iterator;
 
 public class ClienteIterator implements Iterator{

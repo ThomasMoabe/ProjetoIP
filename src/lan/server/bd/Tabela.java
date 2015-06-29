@@ -285,8 +285,8 @@ public abstract class Tabela { //um repositório genérico que é tratado da mesma 
 	}
 	
 	public void atualiza(String query) {
-		query = query.replaceAll("}\\s","}");
-		query = query.replaceAll("\\s\\{","{");
+		query = query.replaceAll("}\\s+","}");
+		query = query.replaceAll("\\s+\\{","{");
 		if(query.toLowerCase().indexOf("}where{") > 0) {
 			query = query.replaceAll("}WHERE\\{","}where{");
 			String[] separa = query.split("}where\\{");

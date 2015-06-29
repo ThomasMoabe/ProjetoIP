@@ -28,6 +28,11 @@ public class ProdutosManager {
 		this.tabelacategoriasprodutos.remove("{id=" + id + "}");
 	}
 	
+	public CategoriaProdutos getCategoria(String id) {
+		Registro[] categoria = this.tabelacategoriasprodutos.procura("{id=" + id + "}");
+		return (CategoriaProdutos) categoria[0];
+	}
+	
 	public CategoriaIterator iteratorCategorias() {
 		Registro[] categoriasdisponiveis = this.tabelacategoriasprodutos.procura("");
 		return new CategoriaIterator(categoriasdisponiveis);

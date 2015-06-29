@@ -7,6 +7,7 @@ import lan.server.util.*;
 import lan.server.caixa.*;
 import lan.server.produtos.*;
 import lan.server.clientes.*;
+import lan.server.sessoes.*;
 
 public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai fazer
 	private Config config;
@@ -15,6 +16,7 @@ public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai
 	private Caixa caixa;
 	private ProdutosManager produtos;
 	private ClientesManager clientes;
+	private SessaoManager sessoes;
 	
 	public Lan() throws ConfiguracaoInvalidaException {
 		this.config = new Config();
@@ -40,6 +42,8 @@ public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai
 			this.caixa = new Caixa();
 			this.produtos = new ProdutosManager();
 			this.clientes = new ClientesManager();
+			this.sessoes = new SessaoManager();
+			new Thread(this.sessoes).start(); //inicia verificação de sessões em tempo real
 		}
 		
 		public void deletaAdministrador(String id) throws ImpossivelDeletarAdministradorException { //exceção caso o administrador tente excluir ele mesmo
@@ -92,6 +96,10 @@ public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai
 			this.produtos.deletarcategoria(id);
 		}
 		
+		public CategoriaProdutos getCategoriaProdutos(String id) {
+			return this.produtos.getCategoria(id);
+		}
+		
 		public CategoriaIterator iteratorCategoriasProdutos() {
 			return this.produtos.iteratorCategorias();
 		}
@@ -137,6 +145,8 @@ public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai
 		
 //	{ início do bloco de clientes
 		
+		/* Relacionado aos clientes em si */
+		
 		public void cadastraAtualizaCliente(String id, String login, String nome, String endereco, String email, String senha, String datanascimento) throws ClienteJaCadastradoException, ClienteLoginInvalidoException, ClienteSenhaFracaException, ClienteValorObrigatorioException {
 			this.clientes.cadastraAtualizaCliente(id, login, nome, endereco, email, senha, datanascimento);
 		}
@@ -157,5 +167,31 @@ public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai
 			return this.clientes.iteratorCliente();
 		}
 		
+		/* Relacionado as horas que estes clientes tem */
+		
+		public void inserirTempo(String idcliente, String idcategoriaproduto, String nomecategoriaproduto, int minutos) {
+			this.clientes.inserirTempo(idcliente, idcategoriaproduto, nomecategoriaproduto, minutos*60);
+		}
+		
+		public TempoClienteIterator iteratorTempoCliente(String idcliente) {
+			return this.clientes.iteratorTempoCliente(idcliente);
+		}
+		
 //	} fim do bloco de clientes
+		
+//	{ início do bloco de sessões ativas OBS !! O iterator de sessões ativas deve ser lido prefenrencialmente por via de uma thread separada do main, assim dá pra verificar em tempo real sem travar a aplicação!!
+		
+		public void novaSessao(String idcliente, String nomecliente, String idcategoria, String nomeproduto) throws ImpossivelCriarSessaoException {
+			this.sessoes.novaSessao(idcliente, nomecliente, idcategoria, nomeproduto);
+		}
+		
+		public void finalizaSessao(String id) {
+			this.sessoes.finalizaSessao(id);
+		}
+		
+		public SessaoIterator iteratorSessoes() {
+			return this.sessoes.iterator();
+		}
+		
+//	} fim do bloco de sessões ativas
 }
