@@ -9,10 +9,12 @@ public class Sessao extends Registro {
 	private String nomeproduto;
 	private int iniciosessao;
 	private int tempodisponivel;
+	private SessaoListener sessaolistener;
 	
 	public Sessao(String[] valores) {
 		super(valores);
 		this.setValores(valores);
+		this.sessaolistener = null; //Objeto que vai receber evento de fim de sessão
 	}
 	
 	public void setValores(String[] valores) {
@@ -43,5 +45,13 @@ public class Sessao extends Registro {
 	
 	public String getNomeProduto() {
 		return this.nomeproduto;
+	}
+	
+	public void setSessaoListener(SessaoListener listener) { 
+		this.sessaolistener = listener;
+	}
+	
+	public SessaoListener getSessaoListener() {
+		return this.sessaolistener;
 	}
 }

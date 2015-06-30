@@ -1,5 +1,7 @@
 package lan.server.painel;
 
+import java.text.DecimalFormat;
+
 import lan.server.bd.BD;
 import lan.server.administracao.*;
 import lan.server.servicos.*;
@@ -8,6 +10,7 @@ import lan.server.caixa.*;
 import lan.server.produtos.*;
 import lan.server.clientes.*;
 import lan.server.sessoes.*;
+import lan.server.vendas.*;
 
 public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai fazer
 	private Config config;
@@ -15,6 +18,7 @@ public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai
 	private ServicosManager srvmanager;
 	private Caixa caixa;
 	private ProdutosManager produtos;
+	private VendasManager vendas;
 	private ClientesManager clientes;
 	private SessaoManager sessoes;
 	
@@ -41,6 +45,7 @@ public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai
 			this.srvmanager = new ServicosManager();
 			this.caixa = new Caixa();
 			this.produtos = new ProdutosManager();
+			this.vendas = new VendasManager();
 			this.clientes = new ClientesManager();
 			this.sessoes = new SessaoManager();
 			new Thread(this.sessoes).start(); //inicia verificação de sessões em tempo real
@@ -126,11 +131,13 @@ public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai
 			this.srvmanager.cadastrarservico(descricao, valor);
 		}
 		
-		public void contrataServico(String id, int quantidade) throws ServicoNaoEncontradoException, SaldoInsuficienteException {
+		public void contrataServico(String id, int quantidade, double desconto) throws ServicoNaoEncontradoException, DescontoInvalidoException, SaldoInsuficienteException {
 			Servico contrata = this.srvmanager.procura(id);
 			double faturou = contrata.getPreco() * quantidade;
+			DecimalFormat df = new DecimalFormat("#.##");
+			faturou = Double.valueOf(df.format(faturou));
 			String descricao = "Referente à contratação de serviço: " + contrata.getDescricao() + " (" + quantidade + ")";
-			this.novaTransacaoFinanceira("entrada", descricao, faturou);
+			this.novaVenda(descricao, faturou, desconto);
 		}
 		
 		public void deletaServico(String id) {
@@ -142,6 +149,19 @@ public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai
 		}
 		
 //	} fim do bloco de serviços
+		
+//	{ início do bloco de vendas
+		
+		public void novaVenda(String descricao, double valor, double desconto) throws DescontoInvalidoException, SaldoInsuficienteException {
+			this.vendas.novaVenda(descricao, this.usuariosistema.getNome(), valor, desconto);
+			this.caixa.novatransacao("entrada", descricao, String.valueOf(valor - desconto), this.usuariosistema.getNome());
+		}
+		
+		public VendaIterator iteratorVendas() {
+			return this.vendas.iterator();
+		}
+		
+//	} fim do bloco de vendas
 		
 //	{ início do bloco de clientes
 		
@@ -169,8 +189,13 @@ public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai
 		
 		/* Relacionado as horas que estes clientes tem */
 		
-		public void inserirTempo(String idcliente, String idcategoriaproduto, String nomecategoriaproduto, int minutos) {
-			this.clientes.inserirTempo(idcliente, idcategoriaproduto, nomecategoriaproduto, minutos*60);
+		public void inserirTempo(Cliente cliente, CategoriaProdutos categoria, int minutos, double desconto) throws DescontoInvalidoException, SaldoInsuficienteException { //o método acima será apagado depois da fase de testes!!
+			String descricao = minutos + " adicionados para cliente " + cliente.getNome() + " na categoria " + categoria.getDescricao();
+			double faturou = categoria.getPrecoHora() * (minutos / 60);
+			DecimalFormat df = new DecimalFormat("#.##");
+			faturou = Double.valueOf(df.format(faturou));
+			this.novaVenda(descricao, faturou, desconto);
+			this.clientes.inserirTempo(String.valueOf(cliente.getId()), String.valueOf(categoria.getId()), categoria.getDescricao(), minutos*60);
 		}
 		
 		public TempoClienteIterator iteratorTempoCliente(String idcliente) {
@@ -179,7 +204,7 @@ public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai
 		
 //	} fim do bloco de clientes
 		
-//	{ início do bloco de sessões ativas OBS !! O iterator de sessões ativas deve ser lido prefenrencialmente por via de uma thread separada do main, assim dá pra verificar em tempo real sem travar a aplicação!!
+//	{ início do bloco de sessões ativas OBS !! O iterator de sessões ativas deve ser lido prefenrencialmente por via de uma thread separada do main, assim dá pra verificar o tempo restante em tempo real sem travar a aplicação!!
 		
 		public void novaSessao(String idcliente, String nomecliente, String idcategoria, String nomeproduto) throws ImpossivelCriarSessaoException {
 			this.sessoes.novaSessao(idcliente, nomecliente, idcategoria, nomeproduto);
@@ -187,6 +212,18 @@ public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai
 		
 		public void finalizaSessao(String id) {
 			this.sessoes.finalizaSessao(id);
+		}
+		
+		public void finalizaTodasSessoes() {
+			this.sessoes.finalizatodas();
+		}
+		
+		public int qtdSessoesAtivas() { //método ultulizado durante checagem de finalização do programa
+			return this.sessoes.qtdSessoesAtivas();
+		}
+		
+		public void setSessaoListener(SessaoListener listener) {
+			this.sessoes.setSessaoListener(listener);
 		}
 		
 		public SessaoIterator iteratorSessoes() {
