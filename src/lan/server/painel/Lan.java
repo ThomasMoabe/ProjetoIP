@@ -48,6 +48,7 @@ public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai
 			this.vendas = new VendasManager();
 			this.clientes = new ClientesManager();
 			this.sessoes = new SessaoManager();
+			this.sessoes.setName("CalculaTempoSessoes");
 			new Thread(this.sessoes).start(); //inicia verificação de sessões em tempo real
 		}
 		

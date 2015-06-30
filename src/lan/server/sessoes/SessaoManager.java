@@ -99,8 +99,9 @@ public class SessaoManager extends Thread{
 		SessaoIterator tudo = this.iterator();
 		this.ultimaatualizacaominutos = System.currentTimeMillis()/1000;
 		if (this.qtdSessoesAtivas()  > 0) {
-			System.out.println("atualizando minutos");
+			Thread atualiza = new AtualizacaoMinutos(tudo, this.tempoclientes);
+			atualiza.setName("AtualizaMinutosBD");
+			atualiza.start();
 		}
-		//new AtualizaMinutos(tudo).start();
 	}
 }
