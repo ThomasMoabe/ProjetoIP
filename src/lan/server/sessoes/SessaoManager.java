@@ -16,7 +16,7 @@ public class SessaoManager extends Thread{
 		BD.banco.novatabela("sessoes", new String[] {"(int)id", "(int)idcliente", "(string)nomecliente", "(int)idcategoria", "(string)nomeproduto", "(int)iniciosessao", "(int)tempodisponivel"}, "array");
 		this.tabelasessoes = BD.banco.selecionatabela("sessoes");
 		this.tempoclientes = BD.banco.selecionatabela("tempoclientes");
-		this.intervaloatualizaminutos = 3;
+		this.intervaloatualizaminutos = (5)*60; //5 minutos
 		this.ultimaatualizacaominutos = System.currentTimeMillis()/1000;
 	}
 	
