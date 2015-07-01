@@ -44,7 +44,7 @@ public class CadastroAdministradorFrame extends JFrame {
 		
 		JLabel lblCadastroDeAdministrador = new JLabel("Cadastro de administrador");
 		lblCadastroDeAdministrador.setHorizontalAlignment(SwingConstants.CENTER);
-		lblCadastroDeAdministrador.setFont(new Font("Stencil", Font.PLAIN, 14));
+		lblCadastroDeAdministrador.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblCadastroDeAdministrador.setBounds(29, 28, 282, 14);
 		contentPane.add(lblCadastroDeAdministrador);
 		
@@ -94,7 +94,7 @@ public class CadastroAdministradorFrame extends JFrame {
 		lblConfirmaoDeSenha.setBounds(28, 274, 117, 14);
 		contentPane.add(lblConfirmaoDeSenha);
 		
-		JButton btnContinuar = new JButton("Continuar");
+		JButton btnContinuar = new JButton("Cadastrar");
 		btnContinuar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (passwordField.getText().equals(passwordField_1.getText())) {
