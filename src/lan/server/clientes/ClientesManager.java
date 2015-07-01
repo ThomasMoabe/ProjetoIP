@@ -28,7 +28,7 @@ public class ClientesManager {
 			throw excessaovalornulo;
 		} else if (jacadastrado.length > 0 && !(String.valueOf(((Cliente) jacadastrado[0]).getId()).equals(id))) { //o login deve ser único, se o login já existir, mas o ID do usuário desse login for o mesmo que foi passado como parâmetro então ignora pois se trata de um update
 			throw new ClienteJaCadastradoException();
-		} else if (!login.matches("^[a-z]*[A-Z]*_*[0-9]*$") || login.length() < 4)  {
+		} else if (!login.matches("^[a-zA-Z_0-9]*$") || login.length() < 4)  {
 			throw new ClienteLoginInvalidoException();
 		} else if(senha.length() < 4) {
 			throw new ClienteSenhaFracaException();
