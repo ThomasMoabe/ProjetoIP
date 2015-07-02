@@ -5,9 +5,11 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -15,13 +17,18 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import lan.server.bd.Registro;
+import lan.server.bd.RepositorioLista;
+import lan.server.caixa.Transacao;
 import lan.server.clientes.Cliente;
 import lan.server.clientes.ClienteIterator;
 import lan.server.painel.Lan;
 
 public class PesquisaClienteFrame extends JDialog { //Jdialog
 	private Lan lan;
+	private JDialog janelaclientefilha;
 	DefaultTableModel model; //para uso em inser
+	private Cliente[] clientesobjeto; //usados para manter os objetos de cliente que serão abertos na janela cliente
 	private JPanel contentPane;
 	private JTextField textField;
 	private JTable table;
@@ -37,7 +44,7 @@ public class PesquisaClienteFrame extends JDialog { //Jdialog
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					PesquisaClienteFrame frame = new PesquisaClienteFrame(null);
+					PesquisaClienteFrame frame = new PesquisaClienteFrame(null, null);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -48,9 +55,12 @@ public class PesquisaClienteFrame extends JDialog { //Jdialog
 	/**
 	 * Create the frame.
 	 */
-	public PesquisaClienteFrame(Lan lan) {
+	public PesquisaClienteFrame(Lan lan, JFrame frame) {
+		super (frame);
 		this.lan = lan;
-		this.setVisible(true);
+		setModal(true);
+		this.janelaclientefilha = null;
+		setLocationRelativeTo(frame);
 		
 		setTitle("Clientes");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -66,6 +76,11 @@ public class PesquisaClienteFrame extends JDialog { //Jdialog
 		panel.setLayout(new BorderLayout(0, 0));
 		
 		textField = new JTextField();
+		textField.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				procura(textField.getText());
+			}
+		});
 		panel.add(textField, BorderLayout.CENTER);
 		textField.setColumns(10);
 		
@@ -188,21 +203,35 @@ public class PesquisaClienteFrame extends JDialog { //Jdialog
 		table.setFillsViewportHeight(true);
 		contentPane.add(scrollPane, BorderLayout.CENTER);
 		
+		table.addMouseListener(new java.awt.event.MouseAdapter() {
+		    @Override
+		    public void mouseClicked(java.awt.event.MouseEvent evt) {
+		        int row = table.rowAtPoint(evt.getPoint());
+		        int col = table.columnAtPoint(evt.getPoint());
+		        if (evt.getClickCount() == 2) {
+		        	if (row >= 0 && col >= 0) {
+		        		abrejanelacliente(clientesobjeto[row]);
+		            	//System.out.println(model.getValueAt(row, 4));
+		        	}
+		        }
+		    }
+		});
+		
 		
 		panel_1 = new JPanel();
 		contentPane.add(panel_1, BorderLayout.SOUTH);
 		panel_1.setBorder(new EmptyBorder(10, 0, 7, 0) );
 		panel_1.setLayout(new BorderLayout(0, 0));
 		btnNewButton_2 = new JButton("Cadastrar novo");
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				abrejanelacliente(null);
+			}
+		});
 		panel_1.add(btnNewButton_2, BorderLayout.EAST);
-		   
-		  
-		
-		//DefaultTableModel model = (DefaultTableModel) table.getModel();
-		//model.addRow(new Object[]{"Column 1", "Column 2", "Column 3"});
 		
 		setMinimumSize(new Dimension(800, 400));
-		setModal(true);
+		this.setVisible(true);
 	}
 	
 	public void procura(String parametros) {
@@ -213,8 +242,22 @@ public class PesquisaClienteFrame extends JDialog { //Jdialog
 		}
 		while (encontrados.hasNext()) {
 			Cliente atual = encontrados.next();
+			RepositorioLista clientesobjeto = new RepositorioLista("tempclientes", atual.getTabela().getCamposTipos());
+			clientesobjeto.inserir((Registro) atual);
+			Registro[] clientesobjetoarray = clientesobjeto.toArray();
+			this.clientesobjeto = Arrays.copyOf(clientesobjetoarray, clientesobjetoarray.length, Cliente[].class);
 			this.model.addRow(new Object[]{atual.getNome(), atual.getLogin(), atual.getEndereco(), atual.getEmail(), atual.getDataCadastro(), atual});
 		}
 		//this.model.addRow(new Object[]{parametros, "v2", "v2", "v2", "v2"});
+	}
+	
+	public void abrejanelacliente(Cliente cliente) {
+		if (this.janelaclientefilha == null) {
+			this.janelaclientefilha = new ClienteFrame(cliente, this);
+		} else {
+			this.janelaclientefilha.dispose();
+			this.janelaclientefilha = new ClienteFrame(cliente, this);
+		}
+		//new ClienteFrame(cliente, this);
 	}
 }

@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
 import javax.swing.AbstractAction;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -65,7 +66,7 @@ public class IndexFrame extends JFrame {
 	}
 
 	public void abrepesquisaclientes() {
-		new PesquisaClienteFrame(this.lan);
+		new PesquisaClienteFrame(this.lan, this);
 	}
 
 }

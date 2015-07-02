@@ -49,8 +49,9 @@ public class ClientesManager {
 	}
 	
 	public ClienteIterator procuraClientes(String parametros) { // "parâmetros" pois vai servir tanto pra procurar pelo nome como login ultilizando a mesma variável se houver 4 ou mais caracteres
+		int tamanhoparametros = parametros.length();
 		parametros = Pattern.quote(parametros);
-		String query = "{nome=" + parametros + ".*}" + (parametros.length() >= 4 ? " OR {login=" + parametros + ".*}" : "" + " ORDER BY nome ACS");
+		String query = "{nome=" + parametros + ".*}" + (tamanhoparametros >= 4 ? " OR {login=" + parametros + ".*}" : "" + " ORDER BY nome ACS");
 		Registro[] clientesencontrados = this.tabelaclientes.procuraIgnoreCase(query);
 		return new ClienteIterator(clientesencontrados);
 	}
