@@ -29,6 +29,7 @@ public class IndexFrame extends JFrame {
 			lan.cadastraAdministrador("Thomas", "Thomas", "casaca");
 			lan.loginAdministrador("Thomas", "casaca");
 			lan.cadastraAtualizaCliente("0", "TAfm", "Teste", "ookok", "@@@", "******", "00/00/00");
+			lan.cadastraAtualizaCliente("0", "TAfX", "Teste", "ookok", "@@@", "******", "00/00/00");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -68,5 +69,4 @@ public class IndexFrame extends JFrame {
 	public void abrepesquisaclientes() {
 		new PesquisaClienteFrame(this.lan, this);
 	}
-
 }

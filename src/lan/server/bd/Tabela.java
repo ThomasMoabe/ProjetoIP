@@ -1,5 +1,8 @@
 package lan.server.bd;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public abstract class Tabela { //um repositório genérico que é tratado da mesma forma independente de ser array, lista ou excell
 	private String nome;
 	protected String[] tipos; //int, double, string, data, hora
@@ -318,16 +321,20 @@ public abstract class Tabela { //um repositório genérico que é tratado da mesma 
 		return posicao;
 	}
 	
-	private String[][] ExplodeQuery(String query) {
-		int count = query.length() - query.replace("{", "").length();
-		String[][] explodida = new String[count][2];
-		int posicaoatual = 0;
-		while(query.indexOf("{")>=0) {
-			query = query.substring(query.indexOf("{")+1);
-			String[] explodevalor = query.substring(0, query.indexOf("}")).split("=");
-			explodida[posicaoatual][0] = explodevalor[0];
-			explodida[posicaoatual][1] = explodevalor[1];
-			posicaoatual++;
+	private String[][] ExplodeQuery(String query) { System.out.println(query);
+		Pattern pat = Pattern.compile("(\\{.*?[^\\\\]})");
+		Matcher buscaparametros = pat.matcher(query);
+		int parametrosencontrados = 0;
+		while (buscaparametros.find()) {
+			parametrosencontrados++;
+		}
+		String[][] explodida = new String[parametrosencontrados][2];
+		buscaparametros = pat.matcher(query);
+		int indice = 0;
+		while (buscaparametros.find()) {
+			explodida[indice][0] = buscaparametros.group().substring(1, buscaparametros.group().indexOf("="));
+			explodida[indice][1] = buscaparametros.group().substring(buscaparametros.group().indexOf("=") + 1, buscaparametros.group().length()-1).replace("\\}", "}");
+			indice++;
 		}
 		return explodida;
 	}

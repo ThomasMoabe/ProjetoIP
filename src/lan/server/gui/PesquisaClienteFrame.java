@@ -78,7 +78,7 @@ public class PesquisaClienteFrame extends JDialog { //Jdialog
 		textField = new JTextField();
 		textField.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				procura(textField.getText());
+				procuracliente();
 			}
 		});
 		panel.add(textField, BorderLayout.CENTER);
@@ -92,98 +92,11 @@ public class PesquisaClienteFrame extends JDialog { //Jdialog
 		btnNewButton = new JButton("Procurar cliente");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				procura(textField.getText());
+				procuracliente();
 			}
 		});
 		panel_2.add(btnNewButton);
-		
-		String[] columnNames = {"Nome",
-                "Login",
-                "Endereço",
-                "E-mail",
-                "Data de cadastro"};
-		Object[][] data = {
-			    /*{"Kathy", "Smith",
-			     "Snowboarding", new Integer(5), new Boolean(false), "casa"},
-			    {"John", "Doe",
-			     "Rowing", new Integer(3), new Boolean(true)},
-			    {"Sue", "Black",
-			     "Knitting", new Integer(2), new Boolean(false)},
-			    {"Jane", "White",
-			     "Speed reading", new Integer(20), new Boolean(true)},
-			    {"Joe", "Brown",
-			     "Pool", new Integer(10), new Boolean(false)}
-			     ,
-				    {"Jane", "White",
-				     "Speed reading", new Integer(20), new Boolean(true)}
-			     ,
-				    {"Jane", "White",
-				     "Speed reading", new Integer(20), new Boolean(true)}
-			     ,
-				    {"Jane", "White",
-				     "Speed reading", new Integer(20), new Boolean(true)}
-			     ,
-				    {"Jane", "White",
-				     "Speed reading", new Integer(20), new Boolean(true)}
-			     ,
-				    {"Jane", "White",
-				     "Speed reading", new Integer(20), new Boolean(true)}
-			     ,
-				    {"Jane", "White",
-				     "Speed reading", new Integer(20), new Boolean(true)}
-			     ,
-				    {"Jane", "White",
-				     "Speed reading", new Integer(20), new Boolean(true)}
-			     ,
-				    {"Jane", "White",
-				     "Speed reading", new Integer(20), new Boolean(true)}
-			     ,
-				    {"Jane", "White",
-				     "Speed reading", new Integer(20), new Boolean(true)}
-			     ,
-				    {"Jane", "White",
-				     "Speed reading", new Integer(20), new Boolean(true)}
-			     ,
-				    {"Jane", "White",
-				     "Speed reading", new Integer(20), new Boolean(true)}
-			     
-			     ,
-				    {"Jane", "White",
-				     "Speed reading", new Integer(20), new Boolean(true)}
-			     ,
-				    {"Jane", "White",
-				     "Speed reading", new Integer(20), new Boolean(true)}
-			     ,
-				    {"Jane", "White",
-				     "Speed reading", new Integer(20), new Boolean(true)}
-			     ,
-				    {"Jane", "White",
-				     "Speed reading", new Integer(20), new Boolean(true)}
-			     ,
-				    {"Jane", "White",
-				     "Speed reading", new Integer(20), new Boolean(true)}
-			     ,
-				    {"Jane", "White",
-				     "Speed reading", new Integer(20), new Boolean(true)}
-			     ,
-				    {"Jane", "White",
-				     "Speed reading", new Integer(20), new Boolean(true)}
-			     ,
-				    {"Jane", "White",
-				     "Speed reading", new Integer(20), new Boolean(true)}
-			     ,
-				    {"Jane", "White",
-				     "Speed reading", new Integer(20), new Boolean(true)}
-			     ,
-				    {"Jane", "White",
-				     "Speed reading", new Integer(20), new Boolean(true)}
-			     ,
-				    {"Jane", "White",
-				     "Speed reading", new Integer(20), new Boolean(true)} */
-			     
-			};
-		
-		
+
 		this.model = new DefaultTableModel() {
 			@Override
 		    public boolean isCellEditable(int row, int column) {
@@ -192,12 +105,17 @@ public class PesquisaClienteFrame extends JDialog { //Jdialog
 		    }
 		}; 
 		this.table = new JTable(model); 
+		model.addColumn("Cod"); 
 		model.addColumn("Nome"); 
 		model.addColumn("Login"); 
 		model.addColumn("Endereço");
 		model.addColumn("E-mail");
 		model.addColumn("Data de cadastro");
-		//table = new JTable(data, columnNames);
+		table.getColumnModel().getColumn(0).setPreferredWidth(20);
+		table.getColumnModel().getColumn(1).setPreferredWidth(100);
+		table.getColumnModel().getColumn(2).setPreferredWidth(20);
+		table.getColumnModel().getColumn(5).setPreferredWidth(25);
+
 		JScrollPane scrollPane = new JScrollPane(table);
 		table.setAutoCreateRowSorter(true);
 		table.setFillsViewportHeight(true);
@@ -210,7 +128,7 @@ public class PesquisaClienteFrame extends JDialog { //Jdialog
 		        int col = table.columnAtPoint(evt.getPoint());
 		        if (evt.getClickCount() == 2) {
 		        	if (row >= 0 && col >= 0) {
-		        		abrejanelacliente(clientesobjeto[row]);
+		        		abrejanelacliente(String.valueOf(model.getValueAt(row, 0)));
 		            	//System.out.println(model.getValueAt(row, 4));
 		        	}
 		        }
@@ -225,7 +143,7 @@ public class PesquisaClienteFrame extends JDialog { //Jdialog
 		btnNewButton_2 = new JButton("Cadastrar novo");
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				abrejanelacliente(null);
+				abrejanelacliente("0");
 			}
 		});
 		panel_1.add(btnNewButton_2, BorderLayout.EAST);
@@ -234,7 +152,8 @@ public class PesquisaClienteFrame extends JDialog { //Jdialog
 		this.setVisible(true);
 	}
 	
-	public void procura(String parametros) {
+	public void procuracliente() {
+		String parametros = textField.getText();
 		ClienteIterator encontrados = this.lan.procuraClientes(parametros);
 		int linhastabela = this.table.getRowCount(); //remove tudo antes de adicionar
 		for (int i = linhastabela - 1; i >= 0; i--) {
@@ -242,22 +161,22 @@ public class PesquisaClienteFrame extends JDialog { //Jdialog
 		}
 		while (encontrados.hasNext()) {
 			Cliente atual = encontrados.next();
-			RepositorioLista clientesobjeto = new RepositorioLista("tempclientes", atual.getTabela().getCamposTipos());
-			clientesobjeto.inserir((Registro) atual);
-			Registro[] clientesobjetoarray = clientesobjeto.toArray();
-			this.clientesobjeto = Arrays.copyOf(clientesobjetoarray, clientesobjetoarray.length, Cliente[].class);
-			this.model.addRow(new Object[]{atual.getNome(), atual.getLogin(), atual.getEndereco(), atual.getEmail(), atual.getDataCadastro(), atual});
+			this.model.addRow(new Object[]{atual.getId(), atual.getNome(), atual.getLogin(), atual.getEndereco(), atual.getEmail(), atual.getDataCadastro()});
 		}
 		//this.model.addRow(new Object[]{parametros, "v2", "v2", "v2", "v2"});
 	}
 	
-	public void abrejanelacliente(Cliente cliente) {
+	public void abrejanelacliente(String id) {
+		Cliente cliente = id.equals("0") ? null : this.lan.getCliente(id);
 		if (this.janelaclientefilha == null) {
-			this.janelaclientefilha = new ClienteFrame(cliente, this);
+			this.janelaclientefilha = new ClienteFrame(this.lan, cliente, this);
 		} else {
 			this.janelaclientefilha.dispose();
-			this.janelaclientefilha = new ClienteFrame(cliente, this);
+			this.janelaclientefilha = new ClienteFrame(this.lan, cliente, this);
 		}
-		//new ClienteFrame(cliente, this);
+	}
+	
+	public void callbackmodificacao() { //se excluir ou atualizar o cadastro do cliente a janela do cliente avisa pra atualizar na pesquisa
+		this.procuracliente();
 	}
 }

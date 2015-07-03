@@ -7,6 +7,7 @@ public class Cliente extends Registro {
 	private String nome;
 	private String endereco;
 	private String email;
+	private String senha;
 	private String datacadastro;
 	private String datanascimento;
 	
@@ -21,6 +22,7 @@ public class Cliente extends Registro {
 		this.nome = valores[2];
 		this.endereco = valores[3];
 		this.email = valores[4];
+		this.senha = valores[5];
 		this.datacadastro = valores[6];
 		this.datanascimento = valores[7];
 	}
@@ -39,6 +41,10 @@ public class Cliente extends Registro {
 	
 	public String getEmail() {
 		return this.email;
+	}
+	
+	public String getSenha() {
+		return this.senha;
 	}
 	
 	public String getDataCadastro() {

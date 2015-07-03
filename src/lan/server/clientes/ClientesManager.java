@@ -18,6 +18,13 @@ public class ClientesManager {
 	}
 	
 	public void cadastraAtualizaCliente(String id, String login, String nome, String endereco, String email, String senha, String datanascimento) throws ClienteJaCadastradoException, ClienteLoginInvalidoException, ClienteSenhaFracaException, ClienteValorObrigatorioException { //este método serve tanto para cadastrar quanto para atualizar um novo cliente, a única diferença é que um novo cadastro deve ter id com valor 0
+		/* Escapa tudo da expressão regular de update (nessessário para o método explodequery) */
+		
+		login = login.replace("}", "\\}");
+		nome = nome.replace("}", "\\}");
+		endereco = endereco.replace("}", "\\}");
+		email = email.replace("}", "\\}");
+		senha = senha.replace("}", "\\}");
 		Registro[] jacadastrado = login.length() > 0? this.tabelaclientes.procura("{login=" + login + "}") : new Registro[0];
 		ClienteValorObrigatorioException excessaovalornulo = new ClienteValorObrigatorioException();
 		if((login.length() == 0 && excessaovalornulo.adicionarValorNulo("Login"))
@@ -51,7 +58,7 @@ public class ClientesManager {
 	public ClienteIterator procuraClientes(String parametros) { // "parâmetros" pois vai servir tanto pra procurar pelo nome como login ultilizando a mesma variável se houver 4 ou mais caracteres
 		int tamanhoparametros = parametros.length();
 		parametros = Pattern.quote(parametros);
-		String query = "{nome=" + parametros + ".*}" + (tamanhoparametros >= 4 ? " OR {login=" + parametros + ".*}" : "" + " ORDER BY nome ACS");
+		String query = "{nome=" + parametros + ".*}" + (tamanhoparametros >= 4 ? " OR {login=" + parametros + ".*}" : "" + " ORDER BY nome ASC");
 		Registro[] clientesencontrados = this.tabelaclientes.procuraIgnoreCase(query);
 		return new ClienteIterator(clientesencontrados);
 	}
@@ -79,6 +86,10 @@ public class ClientesManager {
 			TempoCliente acrescenta = new TempoCliente(valores);
 			this.tabelatempoclientes.inserir((Registro) acrescenta);
 		}
+	}
+	
+	public void deletaTempoCliente(String id) {
+		this.tabelatempoclientes.remove("{idcliente=" + id + "}");
 	}
 	
 	public TempoClienteIterator iteratorTempoCliente(String idcliente) {

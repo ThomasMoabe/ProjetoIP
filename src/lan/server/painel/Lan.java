@@ -199,6 +199,10 @@ public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai
 			this.clientes.inserirTempo(String.valueOf(cliente.getId()), String.valueOf(categoria.getId()), categoria.getDescricao(), minutos*60);
 		}
 		
+		public void deletaTempoCliente(String id) {
+			this.clientes.deletaTempoCliente(id);
+		}
+		
 		public TempoClienteIterator iteratorTempoCliente(String idcliente) {
 			return this.clientes.iteratorTempoCliente(idcliente);
 		}
