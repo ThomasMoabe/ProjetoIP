@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
 import javax.swing.AbstractAction;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -15,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.border.EmptyBorder;
 
+import lan.server.clientes.TempoClienteIterator;
 import lan.server.painel.Lan;
 
 public class IndexFrame extends JFrame {
@@ -30,6 +30,16 @@ public class IndexFrame extends JFrame {
 			lan.loginAdministrador("Thomas", "casaca");
 			lan.cadastraAtualizaCliente("0", "TAfm", "Teste", "ookok", "@@@", "******", "00/00/00");
 			lan.cadastraAtualizaCliente("0", "TAfX", "Teste", "ookok", "@@@", "******", "00/00/00");
+			lan.novaCategoriaProdutos("PS2", 1);
+			lan.inserirTempo(lan.getCliente("1"), lan.getCategoriaProdutos("1"), 139, 0);
+			TempoClienteIterator iterator = lan.iteratorTempoCliente("1");
+			/*while(iterator.hasNext()) {
+				System.out.println(iterator.next());
+			}*/
+			TempoClienteIterator iteratortempo = lan.iteratorTempoCliente("1");
+			/*while (iteratortempo.hasNext()) {
+				System.out.println(iteratortempo.next());
+			}*/
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

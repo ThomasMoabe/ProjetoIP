@@ -20,11 +20,11 @@ public class ClientesManager {
 	public void cadastraAtualizaCliente(String id, String login, String nome, String endereco, String email, String senha, String datanascimento) throws ClienteJaCadastradoException, ClienteLoginInvalidoException, ClienteSenhaFracaException, ClienteValorObrigatorioException { //este método serve tanto para cadastrar quanto para atualizar um novo cliente, a única diferença é que um novo cadastro deve ter id com valor 0
 		/* Escapa tudo da expressão regular de update (nessessário para o método explodequery) */
 		
-		login = login.replace("}", "\\}");
-		nome = nome.replace("}", "\\}");
-		endereco = endereco.replace("}", "\\}");
-		email = email.replace("}", "\\}");
-		senha = senha.replace("}", "\\}");
+		login = BD.quoteSimples(login);
+		nome = BD.quoteSimples(nome);
+		endereco = BD.quoteSimples(endereco);
+		email = BD.quoteSimples(email);
+		senha = BD.quoteSimples(senha);
 		Registro[] jacadastrado = login.length() > 0? this.tabelaclientes.procura("{login=" + login + "}") : new Registro[0];
 		ClienteValorObrigatorioException excessaovalornulo = new ClienteValorObrigatorioException();
 		if((login.length() == 0 && excessaovalornulo.adicionarValorNulo("Login"))

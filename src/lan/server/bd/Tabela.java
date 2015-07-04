@@ -321,7 +321,7 @@ public abstract class Tabela { //um repositório genérico que é tratado da mesma 
 		return posicao;
 	}
 	
-	private String[][] ExplodeQuery(String query) { System.out.println(query);
+	private String[][] ExplodeQuery(String query) {
 		Pattern pat = Pattern.compile("(\\{.*?[^\\\\]})");
 		Matcher buscaparametros = pat.matcher(query);
 		int parametrosencontrados = 0;

@@ -43,4 +43,8 @@ public class BD { //um banco de dados genérico que armazena qualquer tipo de "ta
 		}
 		return tabela;
 	}
+	
+	public static String quoteSimples(String escapa) { //sempre que houver a possibilidade do usuário inserir o caractere "}" em um UPDATE de qualquer coisa, deve ser escapado para não cair na expressão regular de update
+		return escapa.replace("}", "\\}");
+	}
 }

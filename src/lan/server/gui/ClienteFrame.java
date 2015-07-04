@@ -209,6 +209,7 @@ public class ClienteFrame extends JDialog {
 			this.setTitle("Cadatro de cliente");
 		}
 		this.preenchecaixas();
+		this.mostratempocliente();
 		this.setVisible(true);
 	}
 	
@@ -290,8 +291,16 @@ public class ClienteFrame extends JDialog {
 	public void mostratempocliente() {
 		TempoClienteIterator tempocliente = this.lan.iteratorTempoCliente(String.valueOf(this.cliente.getId()));
 		while (tempocliente.hasNext()) {
-			TempoCliente tempo = tempocliente.next();
-			this.model.addRow(new Object[]{tempo.getIdCategoriaProduto(), tempo.getSegundos()});
+			TempoCliente tempo = tempocliente.next();System.out.println(tempo);
+			this.model.addRow(new Object[]{tempo.getIdCategoriaProduto(), this.segundosToString(tempo.getSegundos())});
 		}
+	}
+	
+	private String segundosToString(int segundos) {
+		int horastem = (int) Math.floor(segundos/3600);
+		int minutostem = (int) Math.floor((segundos % 3600) / 60);
+		int segundostem = (int) Math.floor(segundos % 60);
+		String horaformatada = (horastem > 0 ? String.valueOf(horastem) + (horastem > 1 ? " horas" : " hora") : "") + ((horastem > 0 && minutostem > 0 && segundostem > 0) ? ", " : (horastem > 0 && minutostem > 0 && segundostem == 0) ? " e " : "") + ((minutostem > 0) ? String.valueOf(minutostem) + (minutostem > 1 ? " minutos" : " minuto") : "") + ((horastem > 0 || minutostem > 0) && (segundostem  >0) ? " e " : "") + (segundostem > 0 ? String.valueOf(segundostem) + (segundostem > 1 ? " segundos" : " segundo") : "");
+		return horaformatada;
 	}
 }
