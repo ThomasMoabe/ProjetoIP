@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -17,12 +16,9 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
-import lan.server.bd.Registro;
-import lan.server.bd.RepositorioLista;
-import lan.server.caixa.Transacao;
 import lan.server.clientes.Cliente;
-import lan.server.clientes.ClienteIterator;
 import lan.server.painel.Lan;
+import lan.server.util.Iterator;
 
 public class PesquisaClienteFrame extends JDialog { //Jdialog
 	private Lan lan;
@@ -154,7 +150,7 @@ public class PesquisaClienteFrame extends JDialog { //Jdialog
 	
 	public void procuracliente() {
 		String parametros = textField.getText();
-		ClienteIterator encontrados = this.lan.procuraClientes(parametros);
+		Iterator<Cliente> encontrados = this.lan.procuraClientes(parametros);
 		int linhastabela = this.table.getRowCount(); //remove tudo antes de adicionar
 		for (int i = linhastabela - 1; i >= 0; i--) {
 		    this.model.removeRow(i);

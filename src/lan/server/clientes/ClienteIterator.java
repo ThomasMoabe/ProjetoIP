@@ -5,7 +5,7 @@ import java.util.Arrays;
 import lan.server.bd.Registro;
 import lan.server.util.Iterator;
 
-public class ClienteIterator implements Iterator{
+public class ClienteIterator implements Iterator<Cliente>{
 	private int registroatual;
 	private Cliente[] clientes;
 	

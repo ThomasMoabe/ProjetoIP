@@ -8,6 +8,7 @@ import lan.server.clientes.ClienteSenhaFracaException;
 import lan.server.clientes.ClienteValorObrigatorioException;
 import lan.server.clientes.ClientesManager;
 import lan.server.clientes.TempoClienteIterator;
+import lan.server.produtos.ProdutosManager;
 import lan.server.sessoes.ImpossivelCriarSessaoException;
 import lan.server.sessoes.SessaoManager;
 import lan.server.util.Config;
@@ -20,6 +21,7 @@ public class testaclientes {
 			Config conf = new Config();
 			BD.tipobanco = conf.getTipoBanco();
 			ClientesManager clientes = new ClientesManager();
+			ProdutosManager produtos = new ProdutosManager();
 			SessaoManager sessoes = new SessaoManager();
 			new Thread(sessoes).start();
 			try {
@@ -35,6 +37,7 @@ public class testaclientes {
 					while (iterator.hasNext()) {
 						System.out.println(iterator.next());
 					}
+					produtos.inserirproduto("1", "PS2-001", "Console");
 					clientes.inserirTempo("1", "1", "PS2", 4);
 					TempoClienteIterator tempo = clientes.iteratorTempoCliente("1");
 					while (tempo.hasNext()) {
@@ -49,10 +52,10 @@ public class testaclientes {
 					//testa sessões
 					
 					
-					try {
-						sessoes.novaSessao("1", "Thomas", "1", "PS2");
+					try {;
+						sessoes.novaSessao("1", "Thomas", "1", produtos.getProduto("1"));
 					} catch (ImpossivelCriarSessaoException e) {
-						// TODO Auto-generated catch block
+						 //TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					

@@ -5,7 +5,7 @@ import lan.server.util.Iterator;
 
 import java.util.Arrays;
 
-public class AdministradorIterator implements Iterator{
+public class AdministradorIterator implements Iterator<Administrador>{
 	private int registroatual;
 	private Administrador[] administradores;
 	

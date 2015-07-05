@@ -76,7 +76,13 @@ public class ClientesManager {
 	
 	/* Tempo dos clientes */
 	
-	public void inserirTempo(String idcliente, String idcategoriaproduto, String nomecategoriaproduto, int segundos) {
+	public void inserirTempo(String idcliente, String idcategoriaproduto, String nomecategoriaproduto, int segundos) throws SessaoIniciadaException {
+		Tabela tabelasessoes = BD.banco.selecionatabela("sessoes");
+		Registro[] sessoesparacategoria = tabelasessoes.procura("{idcliente=" + idcliente + "}{idcategoria=" + idcategoriaproduto + "}");
+		if (sessoesparacategoria.length > 0) {
+			throw new SessaoIniciadaException();
+		}
+		
 		Registro[] categoriacliente = this.tabelatempoclientes.procura("{idcliente=" + idcliente + "}{idcategoriaproduto=" + idcategoriaproduto + "}");
 		if (categoriacliente.length > 0) { //o cliente tem algum resto de tempo que deve ser somado
 			int tempototal = ((TempoCliente) categoriacliente[0]).getSegundos() + segundos;

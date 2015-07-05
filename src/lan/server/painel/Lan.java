@@ -106,7 +106,7 @@ public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai
 			return this.produtos.getCategoria(id);
 		}
 		
-		public CategoriaIterator iteratorCategoriasProdutos() {
+		public CategoriaIterator iteratorCategoriasProdutos() throws NenhumaCategoriaCadastradaException {
 			return this.produtos.iteratorCategorias();
 		}
 		
@@ -116,8 +116,20 @@ public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai
 			this.produtos.inserirproduto(idcategoria, nome, tipo);
 		}
 		
+		public Produto getProduto(String id) {
+			return this.produtos.getProduto(id);
+		}
+		
+		public void verificaProdutosDisponiveis(String categoria) throws NenhumProdutoCadastradoException, NenhumProdutoDisponivelException {
+			this.produtos.verificaProdutosDisponiveis(categoria);
+		}
+		
 		public void deletaProduto(String id) {
 			this.produtos.deletarproduto(id);
+		}
+		
+		public ProdutoIterator iteratorProdutosDisponiveis(String idcategoria) {
+			return this.produtos.iteratorProdutosDisponiveis(idcategoria);
 		}
 		
 		public ProdutoIterator iteratorProduto(String idcategoria) {
@@ -153,9 +165,11 @@ public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai
 		
 //	{ início do bloco de vendas
 		
-		public void novaVenda(String descricao, double valor, double desconto) throws DescontoInvalidoException, SaldoInsuficienteException {
+		public void novaVenda(String descricao, double valor, double desconto) throws DescontoInvalidoException {
 			this.vendas.novaVenda(descricao, this.usuariosistema.getNome(), valor, desconto);
-			this.caixa.novatransacao("entrada", descricao, String.valueOf(valor - desconto), this.usuariosistema.getNome());
+			try {
+				this.caixa.novatransacao("entrada", descricao, String.valueOf(valor - desconto), this.usuariosistema.getNome());
+			} catch (SaldoInsuficienteException e) {}
 		}
 		
 		public VendaIterator iteratorVendas() {
@@ -190,11 +204,11 @@ public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai
 		
 		/* Relacionado as horas que estes clientes tem */
 		
-		public void inserirTempo(Cliente cliente, CategoriaProdutos categoria, int minutos, double desconto) throws DescontoInvalidoException, SaldoInsuficienteException { //o método acima será apagado depois da fase de testes!!
-			String descricao = minutos + " adicionados para cliente " + cliente.getNome() + " na categoria " + categoria.getDescricao();
-			double faturou = categoria.getPrecoHora() * (minutos / 60);
+		public void inserirTempo(Cliente cliente, CategoriaProdutos categoria, int minutos, double desconto) throws DescontoInvalidoException, SessaoIniciadaException { //o método acima será apagado depois da fase de testes!!
+			String descricao = minutos + " minutos adicionados para cliente " + cliente.getNome() + " na categoria " + categoria.getDescricao();
+			double faturou = categoria.getPrecoHora() * ((double) minutos / 60);
 			DecimalFormat df = new DecimalFormat("#.##");
-			faturou = Double.valueOf(df.format(faturou));
+			faturou = Double.valueOf(df.format(faturou).replace(",", "."));
 			this.novaVenda(descricao, faturou, desconto);
 			this.clientes.inserirTempo(String.valueOf(cliente.getId()), String.valueOf(categoria.getId()), categoria.getDescricao(), minutos*60);
 		}
@@ -211,12 +225,12 @@ public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai
 		
 //	{ início do bloco de sessões ativas OBS !! O iterator de sessões ativas deve ser lido prefenrencialmente por via de uma thread separada do main, assim dá pra verificar o tempo restante em tempo real sem travar a aplicação!!
 		
-		public void novaSessao(String idcliente, String nomecliente, String idcategoria, String nomeproduto) throws ImpossivelCriarSessaoException {
-			this.sessoes.novaSessao(idcliente, nomecliente, idcategoria, nomeproduto);
+		public void novaSessao(String idcliente, String nomecliente, String idcategoria, Produto produto) throws ImpossivelCriarSessaoException {
+			this.sessoes.novaSessao(idcliente, nomecliente, idcategoria, produto);
 		}
 		
 		public void finalizaSessao(String id) {
-			this.sessoes.finalizaSessao(id);
+			this.sessoes.finalizaSessao(id, false);
 		}
 		
 		public void finalizaTodasSessoes() {
@@ -225,6 +239,10 @@ public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai
 		
 		public int qtdSessoesAtivas() { //método ultulizado durante checagem de finalização do programa
 			return this.sessoes.qtdSessoesAtivas();
+		}
+		
+		public void checaSessaoCliente(String id) throws SessaoExistenteException {
+			this.sessoes.checaSessoesCliente(id);
 		}
 		
 		public void setSessaoListener(SessaoListener listener) {

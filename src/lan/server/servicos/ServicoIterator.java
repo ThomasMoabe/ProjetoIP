@@ -5,7 +5,7 @@ import lan.server.util.Iterator;
 
 import java.util.Arrays;
 
-public class ServicoIterator implements Iterator{
+public class ServicoIterator implements Iterator<Servico>{
 	private int registroatual;
 	private Servico[] servicos;
 	

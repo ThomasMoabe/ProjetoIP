@@ -25,9 +25,14 @@ import lan.server.clientes.ClienteLoginInvalidoException;
 import lan.server.clientes.ClienteSenhaFracaException;
 import lan.server.clientes.ClienteValorObrigatorioException;
 import lan.server.clientes.TempoCliente;
-import lan.server.clientes.TempoClienteIterator;
 import lan.server.painel.Lan;
+import lan.server.produtos.CategoriaProdutos;
+import lan.server.produtos.NenhumProdutoCadastradoException;
+import lan.server.produtos.NenhumProdutoDisponivelException;
+import lan.server.produtos.NenhumaCategoriaCadastradaException;
+import lan.server.sessoes.SessaoExistenteException;
 import lan.server.util.DataHora;
+import lan.server.util.Iterator;
 
 public class ClienteFrame extends JDialog {
 
@@ -48,6 +53,8 @@ public class ClienteFrame extends JDialog {
 	private JButton btnNewButton_1;
 	JPanel panel;
 	private JTable table;
+	private int temposelecionado;
+	JButton btnNewButton_3;
 
 	public ClienteFrame(Lan lan, Cliente cliente, JDialog frame) {
 		super(frame);
@@ -56,6 +63,7 @@ public class ClienteFrame extends JDialog {
 		this.setModal(true);
 		this.lan = lan;
 		this.cliente = cliente;
+		this.temposelecionado = -1;
 		setResizable(false);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 800, 550);
@@ -102,13 +110,46 @@ public class ClienteFrame extends JDialog {
 		this.table = new JTable(model);
 		table.setAutoCreateRowSorter(true);
 		table.setFillsViewportHeight(true);
+		this.model.addColumn("Cod. Categoria"); 
 		this.model.addColumn("Categoria"); 
 		this.model.addColumn("Tempo");
-		table.getColumnModel().getColumn(0).setPreferredWidth(20);
+		table.removeColumn(table.getColumnModel().getColumn(0));
+		
+		table.addMouseListener(new java.awt.event.MouseAdapter() {
+		    @Override
+		    public void mouseClicked(java.awt.event.MouseEvent evt) {
+		        int row = table.rowAtPoint(evt.getPoint());
+		        int col = table.columnAtPoint(evt.getPoint());
+		        if (evt.getClickCount() == 1) {
+		        	if (row >= 0 && col >= 0) {
+		        		selecionatempo((int)(model.getValueAt(row, 0)));
+		        	}
+		        }
+		    }
+		});
 		
 		
 		JScrollPane scrollPane = new JScrollPane(table);
 		panel_1.add(scrollPane, BorderLayout.CENTER);
+		
+		JButton btnNewButton_2 = new JButton("Inserir tempo");
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				abreinserirtempo();
+			}
+		});
+		btnNewButton_2.setBounds(491, 41, 124, 23);
+		panel.add(btnNewButton_2);
+		
+		btnNewButton_3 = new JButton("Iniciar sess\u00E3o");
+		btnNewButton_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				abreselecaoproduto();
+			}
+		});
+		btnNewButton_3.setEnabled(false);
+		btnNewButton_3.setBounds(491, 75, 124, 23);
+		panel.add(btnNewButton_3);
 		
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -209,7 +250,9 @@ public class ClienteFrame extends JDialog {
 			this.setTitle("Cadatro de cliente");
 		}
 		this.preenchecaixas();
-		this.mostratempocliente();
+		if (this.cliente != null) {
+			this.mostratempocliente();
+		}
 		this.setVisible(true);
 	}
 	
@@ -277,30 +320,67 @@ public class ClienteFrame extends JDialog {
 	}
 	
 	public void excluircadastro() {
-		final JOptionPane optionPane = new JOptionPane();
-		 int escolha = JOptionPane.showConfirmDialog(null, "O cadastro do cliente será excluído permanentemente assim como suas horas de jogo cadastradas\ndeseja continuar?", "Confirmar exclusão", JOptionPane.YES_NO_OPTION);
-		 if (escolha == JOptionPane.YES_OPTION) {
-			 	this.lan.deletaCliente(String.valueOf(this.cliente.getId()));
-			 	this.lan.deletaTempoCliente(String.valueOf(this.cliente.getId()));
+		try {
+			this.lan.checaSessaoCliente(String.valueOf(this.cliente.getId()));
+			final JOptionPane optionPane = new JOptionPane();
+			int escolha = JOptionPane.showConfirmDialog(null, "O cadastro do cliente será excluído permanentemente assim como suas horas de jogo cadastradas\ndeseja continuar?", "Confirmar exclusão", JOptionPane.YES_NO_OPTION);
+			if (escolha == JOptionPane.YES_OPTION) {
+				this.lan.deletaCliente(String.valueOf(this.cliente.getId()));
+				this.lan.deletaTempoCliente(String.valueOf(this.cliente.getId()));
 				new JOptionPane().showMessageDialog(null, "Cliente excluido");
 				this.dispose();
 				((PesquisaClienteFrame)this.paijanela).callbackmodificacao();
-		 }
-	}
-	
-	public void mostratempocliente() {
-		TempoClienteIterator tempocliente = this.lan.iteratorTempoCliente(String.valueOf(this.cliente.getId()));
-		while (tempocliente.hasNext()) {
-			TempoCliente tempo = tempocliente.next();System.out.println(tempo);
-			this.model.addRow(new Object[]{tempo.getIdCategoriaProduto(), this.segundosToString(tempo.getSegundos())});
+			 }
+		} catch (SessaoExistenteException e) {
+			new JOptionPane().showMessageDialog(null, "O cliente possui uma sessão ativa no momento, para exclusão do cadastro a sessão deve ser parada no gerenciador de sessões", "Não foi possível excluir o cliente", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
-	private String segundosToString(int segundos) {
-		int horastem = (int) Math.floor(segundos/3600);
-		int minutostem = (int) Math.floor((segundos % 3600) / 60);
-		int segundostem = (int) Math.floor(segundos % 60);
-		String horaformatada = (horastem > 0 ? String.valueOf(horastem) + (horastem > 1 ? " horas" : " hora") : "") + ((horastem > 0 && minutostem > 0 && segundostem > 0) ? ", " : (horastem > 0 && minutostem > 0 && segundostem == 0) ? " e " : "") + ((minutostem > 0) ? String.valueOf(minutostem) + (minutostem > 1 ? " minutos" : " minuto") : "") + ((horastem > 0 || minutostem > 0) && (segundostem  >0) ? " e " : "") + (segundostem > 0 ? String.valueOf(segundostem) + (segundostem > 1 ? " segundos" : " segundo") : "");
-		return horaformatada;
+	public void mostratempocliente() {
+		int linhastabela = this.table.getRowCount(); 
+		for (int i = linhastabela - 1; i >= 0; i--) {
+		    this.model.removeRow(i);
+		}
+		
+		Iterator<TempoCliente> tempocliente = this.lan.iteratorTempoCliente(String.valueOf(this.cliente.getId()));
+		while (tempocliente.hasNext()) {
+			TempoCliente tempo = tempocliente.next();
+			this.model.addRow(new Object[]{tempo.getIdCategoriaProduto(), tempo.getNomeCategoriaProduto(), DataHora.segundosToString(tempo.getSegundos())});
+		}
+	}
+	
+	public void selecionatempo(int linha) {
+		this.temposelecionado = linha;
+		btnNewButton_3.setEnabled(true);
+	}
+	
+	public void abreinserirtempo() {
+		Iterator<CategoriaProdutos> categorias;
+		try {
+			categorias = this.lan.iteratorCategoriasProdutos();
+			new InserirTempoFrame(this, this.lan, this.cliente, categorias);
+		} catch (NenhumaCategoriaCadastradaException e) {
+			new JOptionPane().showMessageDialog(null, e.getMessage(), "Não é possível inserir tempo", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	public void abreselecaoproduto() {
+		String idcategoria = String.valueOf(this.model.getValueAt(this.temposelecionado-1, 0));
+		CategoriaProdutos categoria = this.lan.getCategoriaProdutos(idcategoria);
+		try {
+			this.lan.checaSessaoCliente(String.valueOf(this.cliente.getId()));
+			this.lan.verificaProdutosDisponiveis(idcategoria);
+			new SelecionaProdutoFrame(this, this.lan, this.cliente, categoria);
+		} catch(SessaoExistenteException e) {
+			new JOptionPane().showMessageDialog(null, "Este cliente já possui uma sessão ativa no momento", "Não é possível iniciar sessão", JOptionPane.ERROR_MESSAGE);
+		} catch (NenhumProdutoCadastradoException e) {
+			new JOptionPane().showMessageDialog(null, e.getMessage(), "Não é possível iniciar sessão", JOptionPane.ERROR_MESSAGE);
+		} catch (NenhumProdutoDisponivelException e) {
+			new JOptionPane().showMessageDialog(null, e.getMessage(), "Não é possível iniciar sessão", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	public void callbacktempoinserido() {
+		this.mostratempocliente();
 	}
 }

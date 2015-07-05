@@ -6,6 +6,7 @@ public class Sessao extends Registro {
 	private int idcliente;
 	private String nomecliente;
 	private int idcategoria;
+	private int idproduto;
 	private String nomeproduto;
 	private int iniciosessao;
 	private int tempodisponivel;
@@ -22,9 +23,10 @@ public class Sessao extends Registro {
 		this.idcliente = Integer.parseInt(valores[1]);
 		this.nomecliente = valores[2];
 		this.idcategoria = Integer.parseInt(valores[3]);
-		this.nomeproduto = valores[4];
-		this.iniciosessao = Integer.parseInt(valores[5]);
-		this.tempodisponivel = Integer.parseInt(valores[6]);
+		this.idproduto = Integer.parseInt(valores[4]);
+		this.nomeproduto = valores[5];
+		this.iniciosessao = Integer.parseInt(valores[6]);
+		this.tempodisponivel = Integer.parseInt(valores[7]);
 	}
 	
 	public int temporestante() {
@@ -41,6 +43,10 @@ public class Sessao extends Registro {
 	
 	public int getIdCategoria() {
 		return this.idcategoria;
+	}
+	
+	public int getIdProduto() {
+		return this.idproduto;
 	}
 	
 	public String getNomeProduto() {

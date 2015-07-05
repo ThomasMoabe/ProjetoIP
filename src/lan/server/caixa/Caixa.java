@@ -37,9 +37,10 @@ public class Caixa {
 			throw new TransacaoNaoEncontradaException();
 		} else {
 			Transacao estorna = (Transacao)transacoes[0];
-			String[] valoresinsere = {String.valueOf(this.tabelatransacoes.getIdAtual()), estorna.getTipo().equals("entrada") ? "saida" : "entrada", "Estorno referente à movimento de número " + id + " (" + estorna.getDescricao() + ")", String.valueOf(estorna.getValor()), DataHora.getData(), DataHora.getHora(), administrador};
+			String[] valoresinsere = {String.valueOf(this.tabelatransacoes.getIdAtual()), estorna.getTipo().equals("entrada") ? "saida" : "entrada", "Estorno referente a movimento número " + id, String.valueOf(estorna.getValor()), DataHora.getData(), DataHora.getHora(), administrador};
 			Transacao insere = new Transacao(valoresinsere);
 			this.tabelatransacoes.inserir(insere);
+			this.saldocache += estorna.getTipo().equals("entrada")? -estorna.getValor() : estorna.getValor();
 		}
 	}
 	

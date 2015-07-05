@@ -1,6 +1,6 @@
 package lan.server.util;
 
-public interface Iterator {
-	public Object next();
+public interface Iterator<tipo> {
+	public tipo next();
 	public boolean hasNext();
 }

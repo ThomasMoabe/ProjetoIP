@@ -5,7 +5,7 @@ import java.util.Arrays;
 import lan.server.bd.Registro;
 import lan.server.util.Iterator;
 
-public class CategoriaIterator implements Iterator{
+public class CategoriaIterator implements Iterator<CategoriaProdutos>{
 	private int registroatual;
 	private CategoriaProdutos[] categorias;
 	

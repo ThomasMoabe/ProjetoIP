@@ -4,7 +4,7 @@ import lan.server.util.Iterator;
 
 import java.util.Arrays;
 
-public class TransacaoIterator implements Iterator{
+public class TransacaoIterator implements Iterator<Transacao>{
 	private int registroatual;
 	private Transacao[] transacoes;
 	

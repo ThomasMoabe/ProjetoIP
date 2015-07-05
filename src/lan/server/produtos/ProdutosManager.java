@@ -33,8 +33,11 @@ public class ProdutosManager {
 		return (CategoriaProdutos) categoria[0];
 	}
 	
-	public CategoriaIterator iteratorCategorias() {
+	public CategoriaIterator iteratorCategorias() throws NenhumaCategoriaCadastradaException {
 		Registro[] categoriasdisponiveis = this.tabelacategoriasprodutos.procura("");
+		if (categoriasdisponiveis.length == 0) {
+			throw new NenhumaCategoriaCadastradaException();
+		}
 		return new CategoriaIterator(categoriasdisponiveis);
 	}
 	
@@ -44,8 +47,26 @@ public class ProdutosManager {
 		this.tabelaprodutos.inserir((Registro) novoproduto);
 	}
 	
+	public Produto getProduto(String id) {
+		Registro[] produtos = this.tabelaprodutos.procura("{id=" + id + "}");
+		return (Produto) produtos[0];
+	}
+	
+	public void verificaProdutosDisponiveis(String categoria) throws NenhumProdutoCadastradoException, NenhumProdutoDisponivelException {
+		if (this.tabelaprodutos.procura("{idcategoria=" + categoria + "}").length == 0) {
+			throw new NenhumProdutoCadastradoException();
+		} else if (this.tabelaprodutos.procura("{alugado=true}").length > 0) {
+			throw new NenhumProdutoDisponivelException();
+		}
+	}
+	
 	public void deletarproduto(String id) {
 		this.tabelaprodutos.remove("{id=" + id + "}");
+	}
+	
+	public ProdutoIterator iteratorProdutosDisponiveis(String idcategoria) {
+		Registro[] produtosdisponiveis = this.tabelaprodutos.procura("{idcategoria=" + idcategoria + "}{alugado=false}");
+		return new ProdutoIterator(produtosdisponiveis);
 	}
 	
 	public ProdutoIterator iteratorProdutos(String idcategoria) {
