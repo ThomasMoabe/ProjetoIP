@@ -24,7 +24,7 @@ public class SelecionaProdutoFrame extends JDialog {
 	private Cliente cliente;
 	private CategoriaProdutos categoria;
 	private JDialog framepai;
-	JComboBox comboBox;
+	private JComboBox comboBox;
 
 	public SelecionaProdutoFrame(JDialog framepai, Lan lan, Cliente cliente, CategoriaProdutos categoria) {
 		setTitle("Produto");

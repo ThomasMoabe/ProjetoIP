@@ -12,6 +12,7 @@ public class Servico extends Registro{
 	}
 	
 	public void setValores(String[] valores) {
+		this.id = Integer.valueOf(valores[0]);
 		this.descricao = valores[1];
 		this.preco = Double.parseDouble(valores[2]);
 	}

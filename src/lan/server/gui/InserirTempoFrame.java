@@ -30,15 +30,15 @@ public class InserirTempoFrame extends JDialog {
 	private JPanel contentPane;
 	private Lan lan;
 	private Cliente cliente;
-	ClienteFrame janelapai;
+	private ClienteFrame janelapai;
 	private JComboBox comboBox;
-	JLabel lblValorDaHora;
-	Iterator<CategoriaProdutos> categorias;
-	JFormattedTextField formattedTextField_3; //horas
-	JFormattedTextField formattedTextField; //minutos
-	JFormattedTextField formattedTextField_2; //valor
-	JFormattedTextField formattedTextField_1; //desconto
-	JLabel lblTotal; //total
+	private JLabel lblValorDaHora;
+	private Iterator<CategoriaProdutos> categorias;
+	private JFormattedTextField formattedTextField_3; //horas
+	private JFormattedTextField formattedTextField; //minutos
+	private JFormattedTextField formattedTextField_2; //valor
+	private JFormattedTextField formattedTextField_1; //desconto
+	private JLabel lblTotal; //total
 	
 	int minutostotal;
 	double desconto;

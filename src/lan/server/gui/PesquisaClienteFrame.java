@@ -23,7 +23,7 @@ import lan.server.util.Iterator;
 public class PesquisaClienteFrame extends JDialog { //Jdialog
 	private Lan lan;
 	private JDialog janelaclientefilha;
-	DefaultTableModel model; //para uso em inser
+	private DefaultTableModel model; //para uso em inser
 	private Cliente[] clientesobjeto; //usados para manter os objetos de cliente que serão abertos na janela cliente
 	private JPanel contentPane;
 	private JTextField textField;
@@ -56,7 +56,6 @@ public class PesquisaClienteFrame extends JDialog { //Jdialog
 		this.lan = lan;
 		setModal(true);
 		this.janelaclientefilha = null;
-		setLocationRelativeTo(frame);
 		
 		setTitle("Clientes");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -125,7 +124,6 @@ public class PesquisaClienteFrame extends JDialog { //Jdialog
 		        if (evt.getClickCount() == 2) {
 		        	if (row >= 0 && col >= 0) {
 		        		abrejanelacliente(String.valueOf(model.getValueAt(row, 0)));
-		            	//System.out.println(model.getValueAt(row, 4));
 		        	}
 		        }
 		    }
@@ -145,6 +143,7 @@ public class PesquisaClienteFrame extends JDialog { //Jdialog
 		panel_1.add(btnNewButton_2, BorderLayout.EAST);
 		
 		setMinimumSize(new Dimension(800, 400));
+		//setLocationRelativeTo(frame);
 		this.setVisible(true);
 	}
 	

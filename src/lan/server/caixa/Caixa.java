@@ -31,12 +31,15 @@ public class Caixa {
 		this.tabelatransacoes.inserir((Registro) insere);
 	}
 	
-	public void removetransacao(String id, String administrador) throws TransacaoNaoEncontradaException { //por motivos de $egurança, este método tem efeito de estorno, a remoção de uma entrada significa a adição de um estorno de saída, o contrário também
+	public void removetransacao(String id, String administrador) throws TransacaoNaoEncontradaException, SaldoInsuficienteException { //por motivos de $egurança, este método tem efeito de estorno, a remoção de uma entrada significa a adição de um estorno de saída, o contrário também
 		Registro[] transacoes = this.tabelatransacoes.procura("{id=" + id + "}");
 		if (transacoes.length == 0) {
 			throw new TransacaoNaoEncontradaException();
 		} else {
 			Transacao estorna = (Transacao)transacoes[0];
+			if (estorna.getTipo().equals("entrada") && (this.saldocache - estorna.getValor()) < 0) {
+				throw new SaldoInsuficienteException();
+			}
 			String[] valoresinsere = {String.valueOf(this.tabelatransacoes.getIdAtual()), estorna.getTipo().equals("entrada") ? "saida" : "entrada", "Estorno referente a movimento número " + id, String.valueOf(estorna.getValor()), DataHora.getData(), DataHora.getHora(), administrador};
 			Transacao insere = new Transacao(valoresinsere);
 			this.tabelatransacoes.inserir(insere);

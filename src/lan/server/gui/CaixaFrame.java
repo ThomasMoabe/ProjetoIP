@@ -21,6 +21,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 
+import lan.server.caixa.SaldoInsuficienteException;
 import lan.server.caixa.Transacao;
 import lan.server.caixa.TransacaoNaoEncontradaException;
 import lan.server.painel.Lan;
@@ -207,6 +208,7 @@ public class CaixaFrame extends JDialog {
 		
 		panel_9 = new JPanel();
 		FlowLayout flowLayout_1 = (FlowLayout) panel_9.getLayout();
+		flowLayout_1.setHgap(0);
 		flowLayout_1.setVgap(10);
 		panel_2.add(panel_9, BorderLayout.EAST);
 		
@@ -219,6 +221,7 @@ public class CaixaFrame extends JDialog {
 				abreentradaretirada();
 			}
 		});
+		panel_10.setLayout(new BorderLayout(0, 0));
 		panel_10.add(btnNewButton);
 		
 		setMinimumSize(new Dimension(800, 500));
@@ -249,6 +252,8 @@ public class CaixaFrame extends JDialog {
 			this.lan.removeTransacaoFinanceira(this.transacaoselecionada);
 			new JOptionPane().showMessageDialog(null, "Valor estornado");
 		} catch (TransacaoNaoEncontradaException e) {
+			new JOptionPane().showMessageDialog(null, e.getMessage(), "Erro ao estornar transação", JOptionPane.ERROR_MESSAGE);
+		} catch (SaldoInsuficienteException e) {
 			new JOptionPane().showMessageDialog(null, e.getMessage(), "Erro ao estornar transação", JOptionPane.ERROR_MESSAGE);
 		}
 		this.mostrasaldo();

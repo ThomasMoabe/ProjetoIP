@@ -39,22 +39,22 @@ public class ClienteFrame extends JDialog {
 	private JPanel contentPane;
 	private Lan lan;
 	private Cliente cliente;
-	DefaultTableModel model;
+	private DefaultTableModel model;
 	private JDialog paijanela;
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField textField_2;
 	private JTextField textField_3;
-	JFormattedTextField formattedTextField;
+	private JFormattedTextField formattedTextField;
 	private JTextField textField_4;
 	private JTextField textField_5;
 	private JPasswordField passwordField;
-	JButton btnSalvar;
+	private JButton btnSalvar;
 	private JButton btnNewButton_1;
-	JPanel panel;
+	private JPanel panel;
 	private JTable table;
 	private int temposelecionado;
-	JButton btnNewButton_3;
+	private JButton btnNewButton_3;
 
 	public ClienteFrame(Lan lan, Cliente cliente, JDialog frame) {
 		super(frame);
@@ -322,7 +322,6 @@ public class ClienteFrame extends JDialog {
 	public void excluircadastro() {
 		try {
 			this.lan.checaSessaoCliente(String.valueOf(this.cliente.getId()));
-			final JOptionPane optionPane = new JOptionPane();
 			int escolha = JOptionPane.showConfirmDialog(null, "O cadastro do cliente será excluído permanentemente assim como suas horas de jogo cadastradas\ndeseja continuar?", "Confirmar exclusão", JOptionPane.YES_NO_OPTION);
 			if (escolha == JOptionPane.YES_OPTION) {
 				this.lan.deletaCliente(String.valueOf(this.cliente.getId()));

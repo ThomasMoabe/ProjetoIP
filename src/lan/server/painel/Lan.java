@@ -72,7 +72,7 @@ public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai
 			this.caixa.novatransacao(tipo, descricao, String.valueOf(valor), this.usuariosistema.getNome());
 		}
 		
-		public void removeTransacaoFinanceira(String id) throws TransacaoNaoEncontradaException {
+		public void removeTransacaoFinanceira(String id) throws TransacaoNaoEncontradaException, SaldoInsuficienteException {
 			this.caixa.removetransacao(id, this.usuariosistema.getNome());
 		}
 		
@@ -124,6 +124,10 @@ public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai
 			this.produtos.verificaProdutosDisponiveis(categoria);
 		}
 		
+		public void atualizaProduto(String id, String nome, String tipo) {
+			this.produtos.atualizaproduto(id, nome, tipo);
+		}
+		
 		public void deletaProduto(String id) {
 			this.produtos.deletarproduto(id);
 		}
@@ -144,13 +148,17 @@ public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai
 			this.srvmanager.cadastrarservico(descricao, valor);
 		}
 		
-		public void contrataServico(String id, int quantidade, double desconto) throws ServicoNaoEncontradoException, DescontoInvalidoException, SaldoInsuficienteException {
+		public void contrataServico(String id, int quantidade, double desconto) throws ServicoNaoEncontradoException, DescontoInvalidoException {
 			Servico contrata = this.srvmanager.procura(id);
 			double faturou = contrata.getPreco() * quantidade;
 			DecimalFormat df = new DecimalFormat("#.##");
-			faturou = Double.valueOf(df.format(faturou));
-			String descricao = "Referente à contratação de serviço: " + contrata.getDescricao() + " (" + quantidade + ")";
+			faturou = Double.valueOf(df.format(faturou).replace(",", "."));
+			String descricao = "Referente a contratação de serviço: " + contrata.getDescricao() + " (" + quantidade + ")";
 			this.novaVenda(descricao, faturou, desconto);
+		}
+		
+		public void atualizaServico(String id, String descricao, double valor) {
+			this.srvmanager.atualizaservico(id, descricao, valor);
 		}
 		
 		public void deletaServico(String id) {

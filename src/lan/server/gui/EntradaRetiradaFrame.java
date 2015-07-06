@@ -28,8 +28,8 @@ public class EntradaRetiradaFrame extends JDialog {
 	private JPanel contentPane;
 	private Lan lan;
 	private JTextField textField;
-	JComboBox comboBox;
-	JFormattedTextField formattedTextField;
+	private JComboBox comboBox;
+	private JFormattedTextField formattedTextField;
 	
 	public EntradaRetiradaFrame(Lan lan) {
 		setTitle("Entrada / Retirada");

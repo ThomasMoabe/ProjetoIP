@@ -15,7 +15,7 @@ public class SessaoManager extends Thread{
 	private long ultimaatualizacaominutos;
 	
 	public SessaoManager() {
-		BD.banco.novatabela("sessoes", new String[] {"(int)id", "(int)idcliente", "(string)nomecliente", "(int)idcategoria", "(string)nomeproduto", "(int)iniciosessao", "(int)tempodisponivel"}, "array");
+		BD.banco.novatabela("sessoes", new String[] {"(int)id", "(int)idcliente", "(string)nomecliente", "(int)idcategoria", "(int)idproduto", "(string)nomeproduto", "(int)iniciosessao", "(int)tempodisponivel"}, "array");
 		this.tabelasessoes = BD.banco.selecionatabela("sessoes");
 		this.tempoclientes = BD.banco.selecionatabela("tempoclientes");
 		this.produtos = BD.banco.selecionatabela("produtos");

@@ -11,6 +11,8 @@ public class ProdutosManager {
 		this.tabelacategoriasprodutos = BD.banco.selecionatabela("categoriasprodutos");
 		BD.banco.novatabela("produtos", new String[] {"(int)id","(int)idcategoria","(string)nome","(string)tipo", "(string)alugado"}, BD.tipobanco);
 		this.tabelaprodutos = BD.banco.selecionatabela("produtos");
+		//pode acontecer do programa ser mal finalizando ficando com produtos alugados e sem sessões ativas (que só duram em tempo de execução, logo esta linha abaixo é útil
+		this.tabelaprodutos.atualiza("{alugado=false} WHERE {id>0}");
 	}
 	
 	public void inserircategoria(String descricao, double precohora) {
@@ -20,11 +22,23 @@ public class ProdutosManager {
 	}
 	
 	public void atualizarcategoria(String id, String descricao, double precohora) {
+		descricao = BD.quoteSimples(descricao);
+		{ //bloco de consistência de dados (altera os nomes das categorias na tabela de horas)
+			Tabela tempo = BD.banco.selecionatabela("tempoclientes");
+			tempo.atualiza("{nomecategoriaproduto=" + descricao + "} WHERE {idcategoriaproduto=" + id + "}");
+		}
 		String queryatualiza = "{descricao=" + descricao + "}{precohora=" + String.valueOf(precohora) + "} WHERE {id=" + id + "}";
 		this.tabelacategoriasprodutos.atualiza(queryatualiza);
 	}
 	
 	public void deletarcategoria(String id) {
+		{ //bloco de consistência de dados (efeito cascade manual)
+			Tabela sessoes = BD.banco.selecionatabela("sessoes");
+			sessoes.remove("{idcategoria=" + id + "}"); //destroi todas as sessões ativas para a categoria
+			Tabela tempoclientes = BD.banco.selecionatabela("tempoclientes");
+			tempoclientes.remove("{idcategoriaproduto=" + id + "}"); //deleta todo o tempo que os clientes tem na categoria
+			this.tabelaprodutos.remove("{idcategoria=" + id + "}"); //deleta todos os produtos na categoria
+		}
 		this.tabelacategoriasprodutos.remove("{id=" + id + "}");
 	}
 	
@@ -58,6 +72,16 @@ public class ProdutosManager {
 		} else if (this.tabelaprodutos.procura("{alugado=true}").length > 0) {
 			throw new NenhumProdutoDisponivelException();
 		}
+	}
+	
+	public void atualizaproduto(String id, String nome, String tipo) {
+		nome = BD.quoteSimples(nome);
+		{ //bloco de consistência de dados, podem haver sessões para este produto ativas, se mudar o nome do produto, muda também o nome nas sessões
+			Tabela sessoes = BD.banco.selecionatabela("sessoes");
+			nome = BD.quoteSimples(nome);
+			sessoes.atualiza("{nomeproduto=" + nome + "} WHERE {idcategoria=" + id + "}");
+		}
+		this.tabelaprodutos.atualiza("{nome=" + nome + "}{tipo=" + tipo + "} WHERE {id=" + id + "}");
 	}
 	
 	public void deletarproduto(String id) {

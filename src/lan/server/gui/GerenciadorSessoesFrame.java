@@ -21,12 +21,12 @@ public class GerenciadorSessoesFrame extends JDialog implements Runnable {
 
 	private JPanel contentPane;
 	private Lan lan;
-	DefaultTableModel model;
+	private DefaultTableModel model;
 	private JTable table;
 	private int idsessaoselecionada;
-	JButton btnPararSesso;
+	private JButton btnPararSesso;
 
-	public GerenciadorSessoesFrame(Lan lan) {
+	public GerenciadorSessoesFrame(IndexFrame framepai, Lan lan) {
 		setResizable(false);
 		this.lan = lan;
 		this.idsessaoselecionada = -1;

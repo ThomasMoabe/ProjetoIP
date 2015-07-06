@@ -16,6 +16,10 @@ public class ServicosManager {
 		this.tabelaservicos.inserir((Registro) novo);
 	}
 	
+	public void atualizaservico(String id, String descricao, double valor) {
+		this.tabelaservicos.atualiza("{descricao=" + descricao + "}{preco=" + String.valueOf(valor) + "} WHERE {id=" + id + "}");
+	}
+	
 	public void deletaservico(String id) {
 		this.tabelaservicos.remove("{id=" + id + "}");
 	}

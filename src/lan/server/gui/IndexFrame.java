@@ -19,13 +19,19 @@ import javax.swing.border.EmptyBorder;
 
 import lan.server.clientes.TempoClienteIterator;
 import lan.server.painel.Lan;
+import lan.server.produtos.CategoriaProdutos;
+import lan.server.produtos.NenhumaCategoriaCadastradaException;
+import lan.server.servicos.Servico;
 import lan.server.sessoes.SessaoListener;
+import lan.server.util.Iterator;
 
 public class IndexFrame extends JFrame implements SessaoListener { //o sessão listener permite "escutar" o fim de sessões e alertar o administrador
 	
 	private Lan lan;
 	private JPanel contentPane;
 	private GerenciadorSessoesFrame gerenciadorsessoes;
+	private JMenu servicos;
+	private JMenuBar menuBar;
 	
 	public static void main(String[] args) {
 		Lan lan = null;
@@ -43,6 +49,7 @@ public class IndexFrame extends JFrame implements SessaoListener { //o sessão li
 				System.out.println(iterator.next());
 			}*/
 			TempoClienteIterator iteratortempo = lan.iteratorTempoCliente("1");
+			lan.cadastraServico("xerox", 0.15);
 			/*while (iteratortempo.hasNext()) {
 				System.out.println(iteratortempo.next());
 			}*/
@@ -65,7 +72,7 @@ public class IndexFrame extends JFrame implements SessaoListener { //o sessão li
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 500, 300);
 		
-		JMenuBar menuBar = new JMenuBar();
+		menuBar = new JMenuBar();
 		JMenu menucadastro = new JMenu("Cadastro");
 		menucadastro.setMnemonic(KeyEvent.VK_C);
 		menucadastro.getAccessibleContext().setAccessibleDescription("Menu de cadastro");
@@ -89,7 +96,39 @@ public class IndexFrame extends JFrame implements SessaoListener { //o sessão li
 			cadastrocategorias.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_2, ActionEvent.ALT_MASK));
 			cadastrocategorias.getAccessibleContext().setAccessibleDescription("Categorias de produtos");
 			menucadastro.add(cadastrocategorias);
+			
+			JMenuItem cadastroprodutos = new JMenuItem(new AbstractAction("Produtos") {
+			    public void actionPerformed(ActionEvent e) {
+			    	abreprodutos();
+			    }
+			});
+			cadastroprodutos.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_3, ActionEvent.ALT_MASK));
+			cadastroprodutos.getAccessibleContext().setAccessibleDescription("Categorias de produtos");
+			menucadastro.add(cadastroprodutos);
+			
+			JMenuItem cadastroservicos = new JMenuItem(new AbstractAction("Serviços") {
+			    public void actionPerformed(ActionEvent e) {
+			    	abreservicos();
+			    }
+			});
+			cadastroservicos.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_4, ActionEvent.ALT_MASK));
+			cadastroservicos.getAccessibleContext().setAccessibleDescription("Cadastro de serviços");
+			menucadastro.add(cadastroservicos);
+			
+			JMenuItem cadastroadministradores = new JMenuItem(new AbstractAction("Administradores") {
+			    public void actionPerformed(ActionEvent e) {
+			    	abreadministradores();
+			    }
+			});
+			cadastroadministradores.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_5, ActionEvent.ALT_MASK));
+			cadastroadministradores.getAccessibleContext().setAccessibleDescription("Cadastro de administradores");
+			menucadastro.add(cadastroadministradores);
 		}
+		
+		this.servicos = new JMenu("Serviços");
+		this.servicos.setMnemonic(KeyEvent.VK_S);
+		this.servicos.getAccessibleContext().setAccessibleDescription("Menu de serviços");
+		menuBar.add(this.servicos);
 		
 		JMenu menufinanceiro = new JMenu("Financeiro");
 		menufinanceiro.setMnemonic(KeyEvent.VK_F);
@@ -102,13 +141,13 @@ public class IndexFrame extends JFrame implements SessaoListener { //o sessão li
 			    	abrecaixa();
 			    }
 			});
-			caixa.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_4, ActionEvent.ALT_MASK));
+			caixa.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_6, ActionEvent.ALT_MASK));
 			caixa.getAccessibleContext().setAccessibleDescription("Caixa");
 			menufinanceiro.add(caixa);
 		}
 		
 		JMenu menusessoes = new JMenu("Sessões");
-		menusessoes.setMnemonic(KeyEvent.VK_S);
+		menusessoes.setMnemonic(KeyEvent.VK_E);
 		menusessoes.getAccessibleContext().setAccessibleDescription("Menu de sessões");
 		menuBar.add(menusessoes);
 		
@@ -118,7 +157,7 @@ public class IndexFrame extends JFrame implements SessaoListener { //o sessão li
 			    	abregerenciadorsessoes();
 			    }
 			});
-			gerenciadorsessoes.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_5, ActionEvent.ALT_MASK));
+			gerenciadorsessoes.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_7, ActionEvent.ALT_MASK));
 			gerenciadorsessoes.getAccessibleContext().setAccessibleDescription("Cadastro de clientes");
 			menusessoes.add(gerenciadorsessoes);
 		}
@@ -127,6 +166,22 @@ public class IndexFrame extends JFrame implements SessaoListener { //o sessão li
 		menurelatorios.setMnemonic(KeyEvent.VK_R);
 		menurelatorios.getAccessibleContext().setAccessibleDescription("Menu de sessões");
 		menuBar.add(menurelatorios);
+		
+		{
+			JMenuItem novorelatorio = new JMenuItem("Novo relatório");
+			novorelatorio.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_8, ActionEvent.ALT_MASK));
+			novorelatorio.getAccessibleContext().setAccessibleDescription("Gerar novo relatório");
+			menurelatorios.add(novorelatorio);
+			
+			JMenuItem relatoriosrecentes = new JMenuItem(new AbstractAction("Relatórios recentes") {
+			    public void actionPerformed(ActionEvent e) {
+			    	abrerelatoriosrecentes();
+			    }
+			});
+			relatoriosrecentes.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_9, ActionEvent.ALT_MASK));
+			relatoriosrecentes.getAccessibleContext().setAccessibleDescription("Visualizar relatórios recentes");
+			menurelatorios.add(relatoriosrecentes);
+		}
 		
 		setJMenuBar(menuBar);
 		
@@ -137,6 +192,7 @@ public class IndexFrame extends JFrame implements SessaoListener { //o sessão li
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		setMinimumSize(new Dimension(850, 600));
+		this.mostramenuservicos();
 		this.setVisible(true);
 	}
 
@@ -145,7 +201,24 @@ public class IndexFrame extends JFrame implements SessaoListener { //o sessão li
 	}
 	
 	public void abrecategorias() {
-		
+		new CategoriasProdutosFrame(this, this.lan);
+	}
+	
+	public void abreprodutos() {
+		try {
+			Iterator<CategoriaProdutos> categorias = this.lan.iteratorCategoriasProdutos();
+			new ProdutosFrame(this.lan, categorias);
+		} catch (NenhumaCategoriaCadastradaException e) {
+			new JOptionPane().showMessageDialog(null, e.getMessage(), "Ops, nada cadastrado ainda", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	public void abreservicos() {
+		new ServicosFrame(this, this.lan);
+	}
+	
+	public void abreadministradores() {
+		new AdministradoresFrame(this.lan);
 	}
 	
 	public void abrecaixa() {
@@ -154,7 +227,7 @@ public class IndexFrame extends JFrame implements SessaoListener { //o sessão li
 	
 	public void abregerenciadorsessoes() {
 		if (this.gerenciadorsessoes == null) {
-			this.gerenciadorsessoes = new GerenciadorSessoesFrame(this.lan);
+			this.gerenciadorsessoes = new GerenciadorSessoesFrame(this, this.lan);
 		} else {
 			this.gerenciadorsessoes.setVisible(true);
 		}
@@ -166,5 +239,36 @@ public class IndexFrame extends JFrame implements SessaoListener { //o sessão li
 	
 	public void sessaoFinalizada(String cliente, String produto) {
 		new JOptionPane().showMessageDialog(this, "Sessão finalizada para cliente: " + cliente + " no produto: " + produto);
+	}
+	
+	public void callbackmodificaservicos() {
+		this.mostramenuservicos();
+	}
+	
+	public void mostramenuservicos() {
+		try {
+			this.servicos.removeAll();
+			
+			Iterator<Servico> servicos = this.lan.iteratorServicos();
+			while (servicos.hasNext()) {
+				final Servico servico = servicos.next();
+				
+				JMenuItem servicoadiciona = new JMenuItem(new AbstractAction(servico.getDescricao()) {
+				    public void actionPerformed(ActionEvent e) {
+				    	abreservico(servico);
+				    }
+				});
+				servicoadiciona.getAccessibleContext().setAccessibleDescription("Serviço " + servico.getDescricao());
+				this.servicos.add(servicoadiciona);
+			}
+		} catch (Exception e) {}
+	}
+	
+	public void abreservico(Servico servico) {
+		new ServicoFrame(this.lan, servico);
+	}
+	
+	public void abrerelatoriosrecentes() {
+		
 	}
 }
