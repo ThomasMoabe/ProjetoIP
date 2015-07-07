@@ -168,17 +168,21 @@ public class IndexFrame extends JFrame implements SessaoListener { //o sessão li
 		menuBar.add(menurelatorios);
 		
 		{
-			JMenuItem novorelatorio = new JMenuItem("Novo relatório");
-			novorelatorio.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_8, ActionEvent.ALT_MASK));
+			JMenu novorelatorio = new JMenu("Novo relatório");
 			novorelatorio.getAccessibleContext().setAccessibleDescription("Gerar novo relatório");
 			menurelatorios.add(novorelatorio);
+			{
+				JMenuItem fluxodecaixa = new JMenuItem("Fluxo de caixa");
+				fluxodecaixa.getAccessibleContext().setAccessibleDescription("Gerar relatório de fluxo de caixa");
+				novorelatorio.add(fluxodecaixa);
+			}
 			
 			JMenuItem relatoriosrecentes = new JMenuItem(new AbstractAction("Relatórios recentes") {
 			    public void actionPerformed(ActionEvent e) {
 			    	abrerelatoriosrecentes();
 			    }
 			});
-			relatoriosrecentes.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_9, ActionEvent.ALT_MASK));
+			relatoriosrecentes.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_8, ActionEvent.ALT_MASK));
 			relatoriosrecentes.getAccessibleContext().setAccessibleDescription("Visualizar relatórios recentes");
 			menurelatorios.add(relatoriosrecentes);
 		}
@@ -269,6 +273,6 @@ public class IndexFrame extends JFrame implements SessaoListener { //o sessão li
 	}
 	
 	public void abrerelatoriosrecentes() {
-		
+		new RelatoriosRecentesFrame(this.lan);
 	}
 }

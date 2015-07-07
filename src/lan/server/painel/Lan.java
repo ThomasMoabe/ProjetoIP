@@ -2,15 +2,17 @@ package lan.server.painel;
 
 import java.text.DecimalFormat;
 
-import lan.server.bd.BD;
 import lan.server.administracao.*;
-import lan.server.servicos.*;
-import lan.server.util.*;
+import lan.server.bd.BD;
 import lan.server.caixa.*;
-import lan.server.produtos.*;
 import lan.server.clientes.*;
+import lan.server.produtos.*;
+import lan.server.relatorios.RelatoriosManager;
+import lan.server.servicos.*;
 import lan.server.sessoes.*;
+import lan.server.util.*;
 import lan.server.vendas.*;
+import lan.server.relatorios.*;
 
 public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai fazer
 	private Config config;
@@ -21,6 +23,7 @@ public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai
 	private VendasManager vendas;
 	private ClientesManager clientes;
 	private SessaoManager sessoes;
+	private RelatoriosManager relatorios;
 	
 	public Lan() throws ConfiguracaoInvalidaException {
 		this.config = new Config();
@@ -49,6 +52,7 @@ public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai
 			this.clientes = new ClientesManager();
 			this.sessoes = new SessaoManager();
 			this.sessoes.setName("CalculaTempoSessoes");
+			this.relatorios = new RelatoriosManager();
 			new Thread(this.sessoes).start(); //inicia verificação de sessões em tempo real
 		}
 		
@@ -262,4 +266,12 @@ public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai
 		}
 		
 //	} fim do bloco de sessões ativas
+		
+//	{ início do bloco de relatórios
+		
+		public RelatoriosGeradosIterator iteratorRelatoriosGerados() {
+			return this.relatorios.iterator();
+		}
+			
+//	} fim do bloco de relatórios	
 }

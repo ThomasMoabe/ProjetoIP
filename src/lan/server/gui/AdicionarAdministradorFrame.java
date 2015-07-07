@@ -33,6 +33,7 @@ public class AdicionarAdministradorFrame extends JDialog {
 	private JPasswordField passwordField_1;
 
 	public AdicionarAdministradorFrame(AdministradoresFrame framepai, Lan lan) {
+		setTitle("Cadastro de administrador");
 		this.framepai = framepai;
 		this.lan = lan;
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);

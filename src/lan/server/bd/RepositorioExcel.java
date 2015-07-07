@@ -142,39 +142,41 @@ public class RepositorioExcel extends Tabela{
 	
 	public Registro getRegistro(int indice, int saltos, Tabela tabela) {
 		Registro encontrado = null;
-		String classe = this.sheet.getRow(0).getCell(0).getStringCellValue();
-		int qtdvalores = this.campos.length; //para criar o array que será passado como argumento
-		String[] valores = new String[qtdvalores];
+		if (this.sheet.getRow(0) != null && this.sheet.getRow(0).getCell(0) != null) {
+			String classe = this.sheet.getRow(0).getCell(0).getStringCellValue();
+			int qtdvalores = this.campos.length; //para criar o array que será passado como argumento
+			String[] valores = new String[qtdvalores];
 
-		Row linha = this.sheet.getRow(indice+this.linhasconfig);
-		if (linha != null) {
-			Iterator<Cell> varrecolunas = linha.iterator();
-			int colunaatual = 0;
-			while (varrecolunas.hasNext()) {
-				valores[colunaatual] = varrecolunas.next().getStringCellValue();
-				colunaatual++;
+			Row linha = this.sheet.getRow(indice+this.linhasconfig);
+			if (linha != null) {
+				Iterator<Cell> varrecolunas = linha.iterator();
+				int colunaatual = 0;
+				while (varrecolunas.hasNext()) {
+					valores[colunaatual] = varrecolunas.next().getStringCellValue();
+					colunaatual++;
+				}
+				// instancia objeto
+				try {
+					Class<?> clazz = Class.forName(classe);
+					Constructor<?> ctor = clazz.getConstructor(String[].class);
+					encontrado = (Registro) ctor.newInstance(new Object[] { valores });
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+				} catch (NoSuchMethodException e) {
+					e.printStackTrace();
+				} catch (SecurityException e) {
+					e.printStackTrace();
+				} catch (InstantiationException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				}
+				encontrado.setTabela(tabela);
 			}
-			// instancia objeto
-			try {
-				Class<?> clazz = Class.forName(classe);
-				Constructor<?> ctor = clazz.getConstructor(String[].class);
-				encontrado = (Registro) ctor.newInstance(new Object[] { valores });
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (NoSuchMethodException e) {
-				e.printStackTrace();
-			} catch (SecurityException e) {
-				e.printStackTrace();
-			} catch (InstantiationException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
-			}
-			encontrado.setTabela(tabela);
 		}
 		return encontrado;
 	}
