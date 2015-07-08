@@ -3,9 +3,11 @@ package lan.server.relatorios;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 
 public class RelatoriosManager {
 	private LogRelatoriosGerados logrelatorios;
@@ -39,6 +41,21 @@ public class RelatoriosManager {
 			log.writeObject(this.logrelatorios);
 			log.close();
 		} catch (Exception e1) {}
+	}
+	
+	public void salvarRelatorio(String nome, Relatorio relatorio, String caminho) {
+			FileWriter arq;
+			try {
+				arq = new FileWriter(caminho);
+				PrintWriter gravarArq = new PrintWriter(arq);
+				for (String linha : relatorio) {
+					gravarArq.append(linha);
+				}
+				arq.close();
+				this.inserirRelatorio(nome, caminho);
+			} catch (IOException e) {
+				
+			}
 	}
 	
 	public RelatoriosGeradosIterator iterator() {

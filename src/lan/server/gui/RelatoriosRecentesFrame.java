@@ -3,10 +3,13 @@ package lan.server.gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -14,10 +17,10 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import lan.server.painel.Lan;
+import lan.server.relatorios.Relatorio;
 import lan.server.relatorios.RelatorioGerado;
+import lan.server.relatorios.RelatorioNaoEncontradoException;
 import lan.server.util.Iterator;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class RelatoriosRecentesFrame extends JDialog {
 
@@ -138,6 +141,14 @@ public class RelatoriosRecentesFrame extends JDialog {
 	}
 	
 	public void abrerelatorio() {
-		new RelatorioFrame();
+		RelatorioGerado relatoriogerado = (RelatorioGerado) this.model.getValueAt(this.linhaselecionada, 0);
+		String caminho = relatoriogerado.getCaminho();
+		Relatorio relatorio;
+		try {
+			relatorio = new Relatorio(caminho);
+			new RelatorioFrame(relatoriogerado.getNomeRelatorio(), this.lan, relatorio, false);
+		} catch (RelatorioNaoEncontradoException e) {
+			new JOptionPane().showMessageDialog(null, e.getMessage(), "Não foi possível abrir relatório", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 }

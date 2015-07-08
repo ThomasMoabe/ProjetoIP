@@ -88,13 +88,15 @@ public class EntradaRetiradaFrame extends JDialog {
 	public void entradasaida() {
 		String tipo = ((TipoTransacaoCombo)comboBox.getSelectedItem()).getValue();
 		String descricao = textField.getText();
-		double valor = Double.parseDouble(formattedTextField.getText().replace(",", "."));
-		try {
-			this.lan.novaTransacaoFinanceira(tipo, descricao, valor);
-			new JOptionPane().showMessageDialog(null, tipo.equals("entrada") ? "Valor adicionado ao caixa" : "Retirada concluída" );
-			this.dispose();
-		} catch (SaldoInsuficienteException e) {
-			new JOptionPane().showMessageDialog(null, e.getMessage(), "Não foi possível inserir nova transação de saída", JOptionPane.ERROR_MESSAGE);
+		double valor = Double.parseDouble(formattedTextField.getText().replace(",", ".").length() > 0 ? formattedTextField.getText().replace(",", ".") : "0");
+		if (valor > 0) {
+			try {
+				this.lan.novaTransacaoFinanceira(tipo, descricao, valor);
+				new JOptionPane().showMessageDialog(null, tipo.equals("entrada") ? "Valor adicionado ao caixa" : "Retirada concluída" );
+				this.dispose();
+			} catch (SaldoInsuficienteException e) {
+				new JOptionPane().showMessageDialog(null, e.getMessage(), "Não foi possível inserir nova transação de saída", JOptionPane.ERROR_MESSAGE);
+			}
 		}
 	}
 }

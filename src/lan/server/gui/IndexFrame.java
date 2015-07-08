@@ -32,32 +32,6 @@ public class IndexFrame extends JFrame implements SessaoListener { //o sessão li
 	private GerenciadorSessoesFrame gerenciadorsessoes;
 	private JMenu servicos;
 	private JMenuBar menuBar;
-	
-	public static void main(String[] args) {
-		Lan lan = null;
-		try {
-			lan = new Lan();
-			lan.cadastraAdministrador("Thomas", "Thomas", "casaca");
-			lan.loginAdministrador("Thomas", "casaca");
-			lan.cadastraAtualizaCliente("0", "TAfm", "Teste", "ookok", "@@@", "******", "00/00/00");
-			lan.cadastraAtualizaCliente("0", "TAfX", "Teste", "ookok", "@@@", "******", "00/00/00");
-			lan.novaCategoriaProdutos("PS2", 1);
-			lan.novoProduto("1", "PS2-001", "Console");
-			lan.inserirTempo(lan.getCliente("1"), lan.getCategoriaProdutos("1"), 30, 0);
-			TempoClienteIterator iterator = lan.iteratorTempoCliente("1");
-			/*while(iterator.hasNext()) {
-				System.out.println(iterator.next());
-			}*/
-			TempoClienteIterator iteratortempo = lan.iteratorTempoCliente("1");
-			lan.cadastraServico("xerox", 0.15);
-			/*while (iteratortempo.hasNext()) {
-				System.out.println(iteratortempo.next());
-			}*/
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		IndexFrame frame = new IndexFrame(lan);
-	}
 
 	public IndexFrame(Lan lan) {
 		addWindowListener(new WindowAdapter() {
@@ -172,9 +146,13 @@ public class IndexFrame extends JFrame implements SessaoListener { //o sessão li
 			novorelatorio.getAccessibleContext().setAccessibleDescription("Gerar novo relatório");
 			menurelatorios.add(novorelatorio);
 			{
-				JMenuItem fluxodecaixa = new JMenuItem("Fluxo de caixa");
-				fluxodecaixa.getAccessibleContext().setAccessibleDescription("Gerar relatório de fluxo de caixa");
-				novorelatorio.add(fluxodecaixa);
+				JMenuItem fluxocaixa = new JMenuItem(new AbstractAction("Fluxo de caixa") {
+				    public void actionPerformed(ActionEvent e) {
+				    	abrerelatoriofluxocaixa();
+				    }
+				});
+				fluxocaixa.getAccessibleContext().setAccessibleDescription("Gerar relatório de fluxo de caixa");
+				novorelatorio.add(fluxocaixa);
 			}
 			
 			JMenuItem relatoriosrecentes = new JMenuItem(new AbstractAction("Relatórios recentes") {
@@ -274,5 +252,9 @@ public class IndexFrame extends JFrame implements SessaoListener { //o sessão li
 	
 	public void abrerelatoriosrecentes() {
 		new RelatoriosRecentesFrame(this.lan);
+	}
+	
+	public void abrerelatoriofluxocaixa() {
+		new RelatorioFluxoCaixaFrame(this.lan);
 	}
 }

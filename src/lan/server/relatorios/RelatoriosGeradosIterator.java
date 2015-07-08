@@ -8,20 +8,20 @@ public class RelatoriosGeradosIterator implements Iterator<RelatorioGerado>{
 	private RelatorioGerado[] relatorios;
 	
 	public RelatoriosGeradosIterator(RelatorioGerado[] relatorios, int quantidade) {
-		this.registroatual = 0;
+		this.registroatual = quantidade;
 		this.relatorios = Arrays.copyOf(relatorios, quantidade, RelatorioGerado[].class);
 	}
 	
 	public boolean hasNext() {
 		boolean temproximo = true;
-		if (registroatual == this.relatorios.length) {
+		if (registroatual == 0) {
 			temproximo = false;
 		}
 		return temproximo;
 	}
 	
 	public RelatorioGerado next() {
-		this.registroatual++;
-		return this.relatorios[this.registroatual-1];
+		this.registroatual--;
+		return this.relatorios[this.registroatual];
 	}
 }

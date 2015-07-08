@@ -272,6 +272,10 @@ public class Lan { //classe de fachada da aplicação, aqui tem tudo o que ela vai
 		public RelatoriosGeradosIterator iteratorRelatoriosGerados() {
 			return this.relatorios.iterator();
 		}
+		
+		public void salvarRelatorio(String nome, Relatorio relatorio, String caminho) {
+			this.relatorios.salvarRelatorio(nome, relatorio, caminho);
+		}
 			
 //	} fim do bloco de relatórios	
 }

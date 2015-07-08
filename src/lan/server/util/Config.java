@@ -10,7 +10,6 @@ public class Config {
 	private String tipobanco;
 	
 	public Config() throws ConfiguracaoInvalidaException {
-		
 		String diretorio = System.getProperty("user.dir") + System.getProperty("file.separator") + "config.txt";
 		FileReader arq = null;
 		try {

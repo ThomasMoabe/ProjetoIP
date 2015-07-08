@@ -7,7 +7,7 @@ public class LogRelatoriosGerados implements Serializable { //repositório de rel
 	private int qtdrelatorios;
 	
 	public LogRelatoriosGerados() {
-		this.relatorios = new RelatorioGerado[2]; //esse array dobra a capacidade sempre que lotar pq sim
+		this.relatorios = new RelatorioGerado[2]; //esse array dobra a capacidade sempre que lotar
 		this.qtdrelatorios = 0;
 	}
 	
