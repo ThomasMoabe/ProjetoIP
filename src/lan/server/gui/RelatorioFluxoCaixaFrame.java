@@ -44,6 +44,7 @@ public class RelatorioFluxoCaixaFrame extends JDialog {
 		contentPane.add(lblDataInicial);
 		
 		formattedTextField = new JFormattedTextField(createFormatter("##/##/####"));
+		formattedTextField.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		formattedTextField.setBounds(100, 43, 83, 20);
 		contentPane.add(formattedTextField);
 		
@@ -53,6 +54,7 @@ public class RelatorioFluxoCaixaFrame extends JDialog {
 		contentPane.add(lblDataFinal);
 		
 		formattedTextField_1 = new JFormattedTextField(createFormatter("##/##/####"));
+		formattedTextField_1.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		formattedTextField_1.setBounds(275, 43, 83, 20);
 		contentPane.add(formattedTextField_1);
 		

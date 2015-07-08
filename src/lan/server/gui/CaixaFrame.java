@@ -166,6 +166,7 @@ public class CaixaFrame extends JDialog {
 		panel_3.add(panel_4);
 		
 		formattedTextField = new JFormattedTextField(createFormatter("##/##/####"));
+		formattedTextField.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		formattedTextField.setColumns(10);
 		panel_4.add(formattedTextField);
 		
@@ -181,6 +182,7 @@ public class CaixaFrame extends JDialog {
 		panel_3.add(panel_7);
 		
 		formattedTextField_1 = new JFormattedTextField(createFormatter("##/##/####"));
+		formattedTextField_1.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		formattedTextField_1.setColumns(10);
 		panel_7.add(formattedTextField_1);
 		
@@ -298,7 +300,11 @@ public class CaixaFrame extends JDialog {
 	}
 	
 	public void abreentradaretirada() {
-		new EntradaRetiradaFrame(this.lan);
+		new EntradaRetiradaFrame(this, this.lan);
 		this.mostrasaldo();
+	}
+	
+	public void callbackentradaretirada() {
+		this.carregavalores();
 	}
 }

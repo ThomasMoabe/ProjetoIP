@@ -27,14 +27,16 @@ public class EntradaRetiradaFrame extends JDialog {
 
 	private JPanel contentPane;
 	private Lan lan;
+	private CaixaFrame framepai;
 	private JTextField textField;
 	private JComboBox comboBox;
 	private JFormattedTextField formattedTextField;
 	
-	public EntradaRetiradaFrame(Lan lan) {
+	public EntradaRetiradaFrame(CaixaFrame framepai, Lan lan) {
 		setTitle("Entrada / Retirada");
 		setResizable(false);
 		this.lan = lan;
+		this.framepai = framepai;
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 461, 215);
 		contentPane = new JPanel();
@@ -93,6 +95,7 @@ public class EntradaRetiradaFrame extends JDialog {
 			try {
 				this.lan.novaTransacaoFinanceira(tipo, descricao, valor);
 				new JOptionPane().showMessageDialog(null, tipo.equals("entrada") ? "Valor adicionado ao caixa" : "Retirada concluída" );
+				this.framepai.callbackentradaretirada();
 				this.dispose();
 			} catch (SaldoInsuficienteException e) {
 				new JOptionPane().showMessageDialog(null, e.getMessage(), "Não foi possível inserir nova transação de saída", JOptionPane.ERROR_MESSAGE);

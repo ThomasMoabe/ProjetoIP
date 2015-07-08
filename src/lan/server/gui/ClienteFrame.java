@@ -203,6 +203,7 @@ public class ClienteFrame extends JDialog {
 		contentPane.add(lblNascimento);
 		
 		formattedTextField = new JFormattedTextField(createFormatter("##/##/####"));
+		formattedTextField.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		formattedTextField.setBounds(419, 137, 95, 20);
 		contentPane.add(formattedTextField);
 		

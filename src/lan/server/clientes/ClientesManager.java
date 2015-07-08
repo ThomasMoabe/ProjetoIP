@@ -31,7 +31,7 @@ public class ClientesManager {
 			| (nome.length() == 0 && excessaovalornulo.adicionarValorNulo("Nome"))
 			| (email.length() == 0 && excessaovalornulo.adicionarValorNulo("E-mail"))
 			| (senha.length() == 0 && excessaovalornulo.adicionarValorNulo("Senha"))
-			| (datanascimento.length() == 0 && excessaovalornulo.adicionarValorNulo("Data de nascimento"))) {
+			| (!datanascimento.matches("[\\d]{2}/[\\d]{2}/[\\d]{4}") && excessaovalornulo.adicionarValorNulo("Data de nascimento"))) {
 			throw excessaovalornulo;
 		} else if (jacadastrado.length > 0 && !(String.valueOf(((Cliente) jacadastrado[0]).getId()).equals(id))) { //o login deve ser único, se o login já existir, mas o ID do usuário desse login for o mesmo que foi passado como parâmetro então ignora pois se trata de um update
 			throw new ClienteJaCadastradoException();

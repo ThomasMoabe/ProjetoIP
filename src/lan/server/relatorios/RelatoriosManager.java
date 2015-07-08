@@ -49,7 +49,7 @@ public class RelatoriosManager {
 				arq = new FileWriter(caminho);
 				PrintWriter gravarArq = new PrintWriter(arq);
 				for (String linha : relatorio) {
-					gravarArq.append(linha);
+					gravarArq.append(linha.substring(0, linha.lastIndexOf("\n")));
 				}
 				arq.close();
 				this.inserirRelatorio(nome, caminho);

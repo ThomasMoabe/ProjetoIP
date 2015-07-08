@@ -114,16 +114,18 @@ public class RelatorioFrame extends JDialog {
 
 		int linhasescritas = 0;
 		for (String linha : relatorio) {
-			lblrelatorio.setText(lblrelatorio.getText() + "<tr" + (linhasescritas==0? " bgcolor=\"#CCCCCC\"" : "") + ">");
-			
-			String linhaatual = linha;
-			Pattern pat = Pattern.compile(".*?[^\\\\]\\t");
-			Matcher buscacolunas = pat.matcher(linhaatual);
-			while (buscacolunas.find()) {
-				lblrelatorio.setText(lblrelatorio.getText() + "<td>" + buscacolunas.group().substring(0, buscacolunas.group().lastIndexOf("\t")) + "</td>");
+			if (!linha.equals("")) { // se não for linha nula (\n) mostra na tela
+				lblrelatorio.setText(lblrelatorio.getText() + "<tr" + (linhasescritas==0? " bgcolor=\"#CCCCCC\"" : "") + ">");
+				
+				String linhaatual = linha;
+				Pattern pat = Pattern.compile(".*?[^\\\\]\\t");
+				Matcher buscacolunas = pat.matcher(linhaatual);
+				while (buscacolunas.find()) {
+					lblrelatorio.setText(lblrelatorio.getText() + "<td>" + buscacolunas.group().substring(0, buscacolunas.group().lastIndexOf("\t")).replace("E", "") + "</td>");
+				}
+				linhasescritas++;
+				lblrelatorio.setText(lblrelatorio.getText() + "</tr>");
 			}
-			linhasescritas++;
-			lblrelatorio.setText(lblrelatorio.getText() + "</tr>");
 		}
 		lblrelatorio.setText(lblrelatorio.getText() + "</table></html>");
 		if (linhasescritas == 1) {

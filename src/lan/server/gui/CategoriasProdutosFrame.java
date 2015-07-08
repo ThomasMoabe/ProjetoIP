@@ -72,6 +72,7 @@ public class CategoriasProdutosFrame extends JDialog {
 		DefaultFormatterFactory valor = new DefaultFormatterFactory(formatavalor);
 		
 		formattedTextField = new JFormattedTextField(valor);
+		formattedTextField.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		formattedTextField.setBounds(274, 22, 60, 20);
 		contentPane.add(formattedTextField);
 		

@@ -94,6 +94,7 @@ public class InserirTempoFrame extends JDialog {
 		DefaultFormatterFactory valor = new DefaultFormatterFactory(formatavalor);  //formatação de valor $$.00
 		
 		formattedTextField = new JFormattedTextField(hora);
+		formattedTextField.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		formattedTextField.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
@@ -154,6 +155,7 @@ public class InserirTempoFrame extends JDialog {
 		contentPane.add(lblHoras);
 		
 		formattedTextField_3 = new JFormattedTextField(hora);
+		formattedTextField_3.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		formattedTextField_3.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent arg0) {
