@@ -28,6 +28,7 @@ public class RelatoriosManager {
 				ObjectOutputStream log = new ObjectOutputStream(saida);
 				log.writeObject(novolog);
 				log.close();
+				this.logrelatorios = novolog;
 			} catch (Exception e1) {e.printStackTrace();}
 		}
 	}

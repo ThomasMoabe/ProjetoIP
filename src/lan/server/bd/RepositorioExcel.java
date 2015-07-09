@@ -31,6 +31,7 @@ public class RepositorioExcel extends Tabela{
 			this.streamentrada = new FileInputStream(BD.caminhoexcel);
 			this.planilhaexcel = new HSSFWorkbook(this.streamentrada);
 			this.sheet = this.planilhaexcel.getSheet(nome);
+			this.streamentrada.close();
 			if (this.sheet == null) { //se a planilha não existe cria uma
 				this.sheet = this.planilhaexcel.createSheet(nome);
 			}
